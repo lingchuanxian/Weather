@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Retrofit 网络接口服务的包装类
- * Created by Xiho on 2016/3/14.
+ * Created by lcx on 2017/5/4.
  */
 public class RetrofitWrapper {
     protected final String TAG = this.getClass().getSimpleName();

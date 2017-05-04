@@ -64,4 +64,6 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     //沉浸式状态栏
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+
+    compile 'com.lzy.widget:view-core:0.1.5'
 }
