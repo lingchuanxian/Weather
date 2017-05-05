@@ -5,13 +5,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.WindowManager;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.smlcx.weather.R;
 import cn.smlcx.weather.app.App;
 
 /**
@@ -19,9 +15,6 @@ import cn.smlcx.weather.app.App;
  */
 
 public abstract class BaseActivity extends AppCompatActivity{
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-
     public Context mContext;
     public App app;
     //public  Toolbar mToolbar;
@@ -49,20 +42,6 @@ public abstract class BaseActivity extends AppCompatActivity{
                 mDrawerLayout.setClipToPadding(false);
             }*/
         }
-
-       // mToolbar = (Toolbar) findViewById(toolbar);
-        //mToolbar.setNavigationIcon(R.mipmap.ic_drawer_home);//设置导航栏图标
-        mToolbar.setTitle("Title");//设置主标题
-        //回退
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
     }
 
     /**

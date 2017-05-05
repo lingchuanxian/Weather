@@ -25,6 +25,7 @@ public class MainActivity extends BaseActivity {
     protected void initViews() {
         mViewPager.setAdapter(new MainAdapter(getSupportFragmentManager()));
         mAlphaIndicator.setViewPager(mViewPager);
+        mViewPager.setOffscreenPageLimit(3);
     }
 
     @Override

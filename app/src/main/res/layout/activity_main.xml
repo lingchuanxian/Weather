@@ -8,12 +8,6 @@
     android:background="#ffffff"
     android:orientation="vertical">
 
-    <include android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             layout="@layout/common_head"
-             tools:layout_editor_absoluteY="0dp"
-             tools:layout_editor_absoluteX="8dp"/>
-
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
@@ -28,7 +22,7 @@
     <com.lzy.widget.AlphaIndicator
         android:id="@+id/alphaIndicator"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="50dp"
         android:orientation="horizontal">
 
         <com.lzy.widget.AlphaView
@@ -38,8 +32,8 @@
             android:padding="5dp"
             app:av_tabIconNormal="@mipmap/home_normal"
             app:av_tabIconSelected="@mipmap/home_selected"
-            app:av_tabText="微信"
-            app:av_tabTextSize="14sp"
+            app:av_tabText="天气"
+            app:av_tabTextSize="12sp"
             app:av_textColorNormal="#999999"
             app:av_textColorSelected="#46c01b"/>
 
@@ -50,8 +44,8 @@
             android:padding="5dp"
             app:av_tabIconNormal="@mipmap/category_normal"
             app:av_tabIconSelected="@mipmap/category_selected"
-            app:av_tabText="通讯录"
-            app:av_tabTextSize="14sp"
+            app:av_tabText="精选"
+            app:av_tabTextSize="12sp"
             app:av_textColorNormal="#999999"
             app:av_textColorSelected="#46c01b"/>
 
@@ -62,8 +56,8 @@
             android:padding="5dp"
             app:av_tabIconNormal="@mipmap/service_normal"
             app:av_tabIconSelected="@mipmap/service_selected"
-            app:av_tabText="发现"
-            app:av_tabTextSize="14sp"
+            app:av_tabText="新闻"
+            app:av_tabTextSize="12sp"
             app:av_textColorNormal="#999999"
             app:av_textColorSelected="#46c01b"/>
 
@@ -75,7 +69,7 @@
             app:av_tabIconNormal="@mipmap/mine_normal"
             app:av_tabIconSelected="@mipmap/mine_selected"
             app:av_tabText="我"
-            app:av_tabTextSize="14sp"
+            app:av_tabTextSize="12sp"
             app:av_textColorNormal="#999999"
             app:av_textColorSelected="#46c01b"/>
     </com.lzy.widget.AlphaIndicator>

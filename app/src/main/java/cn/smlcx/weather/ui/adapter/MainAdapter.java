@@ -7,7 +7,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.smlcx.weather.ui.activity.TextFragment;
+import cn.smlcx.weather.ui.fragment.ChoiceFragment;
+import cn.smlcx.weather.ui.fragment.NewsFragment;
+import cn.smlcx.weather.ui.fragment.PersonalFragment;
+import cn.smlcx.weather.ui.fragment.WeatherFragment;
 
 /**
  * Created by lcx on 2017/5/5.
@@ -15,18 +18,16 @@ import cn.smlcx.weather.ui.activity.TextFragment;
 
 public class MainAdapter extends FragmentPagerAdapter {
     private List<Fragment> fragments = new ArrayList<>();
-    private String[] titles = {//
-            "第一页\n\n重点看下面的的图标是渐变色，随着滑动距离的增加，颜色逐渐过度",//
-            "第二页\n\n重点看下面的的图标是渐变色，随着滑动距离的增加，颜色逐渐过度",//
-            "第三页\n\n重点看下面的的图标是渐变色，随着滑动距离的增加，颜色逐渐过度", //
-            "第四页\n\n重点看下面的的图标是渐变色，随着滑动距离的增加，颜色逐渐过度"};
-
     public MainAdapter(FragmentManager fm) {
         super(fm);
-        fragments.add(TextFragment.newInstance(titles[0]));
-        fragments.add(TextFragment.newInstance(titles[1]));
-        fragments.add(TextFragment.newInstance(titles[2]));
-        fragments.add(TextFragment.newInstance(titles[3]));
+        WeatherFragment wf = new WeatherFragment();
+        ChoiceFragment cf = new ChoiceFragment();
+        NewsFragment nf = new NewsFragment();
+        PersonalFragment pf = new PersonalFragment();
+        fragments.add(wf);
+        fragments.add(cf);
+        fragments.add(nf);
+        fragments.add(pf);
     }
 
     @Override
