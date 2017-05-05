@@ -9,22 +9,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import cn.smlcx.weather.R;
 import cn.smlcx.weather.app.App;
-
-import static cn.smlcx.weather.R.id.toolbar;
 
 /**
  * Created by lcx on 2017/5/4.
  */
 
 public abstract class BaseActivity extends AppCompatActivity{
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
     public Context mContext;
     public App app;
-    public  Toolbar mToolbar;
+    //public  Toolbar mToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(attachLayoutRes());
+        ButterKnife.bind(this);
         init();
         initViews();
         initData();
@@ -45,7 +50,7 @@ public abstract class BaseActivity extends AppCompatActivity{
             }*/
         }
 
-        mToolbar = (Toolbar) findViewById(toolbar);
+       // mToolbar = (Toolbar) findViewById(toolbar);
         //mToolbar.setNavigationIcon(R.mipmap.ic_drawer_home);//设置导航栏图标
         mToolbar.setTitle("Title");//设置主标题
         //回退
