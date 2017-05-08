@@ -77,6 +77,5 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mUnbinder.unbind();
     }
 }

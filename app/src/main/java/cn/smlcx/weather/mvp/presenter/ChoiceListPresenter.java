@@ -2,6 +2,8 @@ package cn.smlcx.weather.mvp.presenter;
 
 import android.util.Log;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import cn.smlcx.weather.Base.BasePresenter;
@@ -52,7 +54,12 @@ public class ChoiceListPresenter extends BasePresenter<ChoiceListModel,ViewContr
                     @Override
                     public void onNext(HttpResult<HttpResult.ResultBean<ChoiceBean>> result) {
                         Log.e("result",result.toString());
-                        mRootView.showChoiceList(result);
+                        List<ChoiceBean> list = result.getResult().getList();
+                        for(ChoiceBean choice:list){
+                            choice.setFirstImg("");
+                        }
+                        Log.e(TAG, "list-size:"+list.size() );
+                        mRootView.showChoiceList(list);
                     }
                 });
 

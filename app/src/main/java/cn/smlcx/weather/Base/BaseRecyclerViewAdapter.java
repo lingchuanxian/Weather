@@ -56,10 +56,10 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
     @Override
     public void onBindViewHolder(BaseViewHolder<T> holder, int position) {
         Log.e("adapter","进入onBindViewHolder");
-        Gson gosn = new Gson();
+       /* Gson gosn = new Gson();
         ChoiceBean cb = gosn.fromJson(mInfos.get(position).toString(),ChoiceBean.class);
-        Log.e("adapter", "onBindViewHolder: "+cb.toString());
-        //holder.setData(cb.toString(), position);
+        Log.e("adapter", "onBindViewHolder: "+cb.toString());*/
+        holder.setData(mInfos.get(position), position);
     }
 
 

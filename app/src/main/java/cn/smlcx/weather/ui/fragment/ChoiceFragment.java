@@ -5,6 +5,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +53,10 @@ public class ChoiceFragment extends BaseFragment<ChoiceListPresenter> implements
                 .build()
                 .inject(this);
         mPresenter.requestChoiceList("d975b5fe029c0691fe5d683cb68b86ac", 1, 20);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        mChoiceList.setLayoutManager(linearLayoutManager);
+        mAdapter = new ChoiceAdapter(mChoice);
+        mChoiceList.setAdapter(mAdapter);
     }
 
     @Override
@@ -71,14 +80,23 @@ public class ChoiceFragment extends BaseFragment<ChoiceListPresenter> implements
     }
 
     @Override
-    public void showChoiceList(HttpResult<HttpResult.ResultBean<ChoiceBean>> result) {
-        Log.e(TAG, "showChoiceList的长度为： "+result.getResult().getList().size());
-        List<ChoiceBean> list = result.getResult().getList();
-        mAdapter = new ChoiceAdapter(list);
-        mChoiceList.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        mChoiceList.setAdapter(mAdapter);
+    public void showChoiceList(List<ChoiceBean> result) {
+        Log.e(TAG, "showChoiceList的长度为： "+result.size());
+        List<ChoiceBean> list2 = fromJsonList(result.toString(),ChoiceBean.class);
+        mChoice.addAll(list2);
+        Log.e(TAG, "mChoice的长度为： "+mChoice.size());
+        mAdapter.notifyDataSetChanged();
     }
 
+    public <T> ArrayList<T> fromJsonList(String json, Class<T> cls) {
+        Gson mGson = new Gson();
+        ArrayList<T> mList = new ArrayList<T>();
+        JsonArray array = new JsonParser().parse(json).getAsJsonArray();
+        for(final JsonElement elem : array){
+            mList.add(mGson.fromJson(elem, cls));
+        }
+        return mList;
+    }
 
     @Override
     public void onDestroyView() {
