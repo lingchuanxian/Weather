@@ -68,4 +68,16 @@ public class ChoiceBean {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    @Override
+    public String toString() {
+        return "ChoiceBean{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", source='" + source + '\'' +
+                ", firstImg='" + firstImg + '\'' +
+                ", mark='" + mark + '\'' +
+                ", url='" + url + '\'' +
+                '}';
+    }
 }

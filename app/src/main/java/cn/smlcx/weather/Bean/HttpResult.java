@@ -80,6 +80,16 @@ public class HttpResult<T> {
         public void setList(List<T> list) {
             this.list = list;
         }
+
+        @Override
+        public String toString() {
+            return "ResultBean{" +
+                    "totalPage=" + totalPage +
+                    ", ps=" + ps +
+                    ", pno=" + pno +
+                    ", list=" + list +
+                    '}';
+        }
     }
 
     @Override

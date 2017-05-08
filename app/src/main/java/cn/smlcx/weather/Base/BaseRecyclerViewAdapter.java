@@ -1,70 +1,133 @@
 package cn.smlcx.weather.Base;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 
+import cn.smlcx.weather.Bean.ChoiceBean;
+
 /**
- * Created by Administrator on 2017/5/5.
- * 对简单的recycleview进行简单的封装
+ * Created by jess on 2015/11/27.
  */
-public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
-   /* private Context context;
-    private LayoutInflater inflater;
-    private List<T> datas;
-    private int layoutId;
-    protected OnItemClickListner onItemClickListner;//单击事件
-    protected OnItemLongClickListner onItemLongClickListner;//长按单击事件
-    private boolean clickFlag = true;//单击事件和长单击事件的屏蔽标识
+public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<BaseViewHolder<T>> {
+    protected List<T> mInfos;
+    protected OnRecyclerViewItemClickListener mOnItemClickListener = null;
+    private BaseViewHolder<T> mHolder;
 
-    public BaseRecyclerViewAdapter(Context context, List<T> datas, int layoutId) {
-        this.context = context;
-        this.datas = datas;
-        this.layoutId = layoutId;
-        this.inflater = LayoutInflater.from(context);
+    public BaseRecyclerViewAdapter(List<T> infos) {
+        super();
+        this.mInfos = infos;
     }
 
+    /**
+     * 创建Hodler
+     *
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @Override
-    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        BaseViewHolder holder = new BaseViewHolder(inflater.inflate(layoutId, parent, false));
-        MaterialRippleLayout.on(holder.getView(R.id.ll_all))
-                .rippleOverlay(true)
-                .rippleAlpha(0.2f)
-                .rippleColor(context.getResources().getColor(R.color.colorAccent))
-                .rippleHover(true)
-                .create();
-        return holder;
+    public BaseViewHolder<T> onCreateViewHolder(ViewGroup parent, final int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(getLayoutId(viewType), parent, false);
+        mHolder = getHolder(view, viewType);
+        mHolder.setOnItemClickListener(new BaseViewHolder.OnViewClickListener() {//设置Item点击事件
+            @Override
+            public void onViewClick(View view, int position) {
+                if (mOnItemClickListener != null && mInfos.size() > 0) {
+                    mOnItemClickListener.onItemClick(view, viewType, mInfos.get(position), position);
+                }
+            }
+        });
+        return mHolder;
     }
 
+    /**
+     * 绑定数据
+     *
+     * @param holder
+     * @param position
+     */
     @Override
-    public void onBindViewHolder(BaseViewHolder holder, int position) {
-        bindData(holder, datas.get(position), position);
+    public void onBindViewHolder(BaseViewHolder<T> holder, int position) {
+        Log.e("adapter","进入onBindViewHolder");
+        Gson gosn = new Gson();
+        ChoiceBean cb = gosn.fromJson(mInfos.get(position).toString(),ChoiceBean.class);
+        Log.e("adapter", "onBindViewHolder: "+cb.toString());
+        //holder.setData(cb.toString(), position);
     }
 
+
+    /**
+     * 数据的个数
+     *
+     * @return
+     */
     @Override
     public int getItemCount() {
-        return datas == null ? 0 : datas.size();
+        return mInfos.size();
     }
 
-    protected abstract void bindData(BaseViewHolder holder, T data, int position);
 
-    public void setOnItemClickListner(OnItemClickListner onItemClickListner) {
-        this.onItemClickListner = onItemClickListner;
+    public List<T> getInfos() {
+        return mInfos;
     }
 
-    public void setOnItemLongClickListner(OnItemLongClickListner onItemLongClickListner) {
-        this.onItemLongClickListner = onItemLongClickListner;
+    /**
+     * 获得item的数据
+     *
+     * @param position
+     * @return
+     */
+    public T getItem(int position) {
+        return mInfos == null ? null : mInfos.get(position);
     }
 
-    public interface OnItemClickListner {
-        void onItemClickListner(View v, int position);
+    /**
+     * 子类实现提供holder
+     *
+     * @param v
+     * @param viewType
+     * @return
+     */
+    public abstract BaseViewHolder<T> getHolder(View v, int viewType);
+
+    /**
+     * 提供Item的布局
+     *
+     * @param viewType
+     * @return
+     */
+    public abstract int getLayoutId(int viewType);
+
+
+    /**
+     * 遍历所有hodler,释放他们需要释放的资源
+     *
+     * @param recyclerView
+     */
+    public static void releaseAllHolder(RecyclerView recyclerView) {
+        if (recyclerView == null) return;
+        for (int i = recyclerView.getChildCount() - 1; i >= 0; i--) {
+            final View view = recyclerView.getChildAt(i);
+            RecyclerView.ViewHolder viewHolder = recyclerView.getChildViewHolder(view);
+            if (viewHolder != null && viewHolder instanceof BaseViewHolder) {
+                ((BaseViewHolder) viewHolder).onRelease();
+            }
+        }
     }
 
-    public interface OnItemLongClickListner {
-        void onItemLongClickListner(View v, int position);
-    }*/
+
+    public interface OnRecyclerViewItemClickListener<T> {
+        void onItemClick(View view, int viewType, T data, int position);
+    }
+
+    public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
+        this.mOnItemClickListener = listener;
+    }
 }

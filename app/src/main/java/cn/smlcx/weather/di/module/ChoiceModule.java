@@ -1,6 +1,7 @@
 package cn.smlcx.weather.di.module;
 
-import cn.smlcx.weather.mvp.model.ModelContract;
+import cn.smlcx.weather.di.scope.FragmentScope;
+import cn.smlcx.weather.mvp.model.ChoiceListModel;
 import cn.smlcx.weather.mvp.presenter.ChoiceListPresenter;
 import cn.smlcx.weather.mvp.view.ViewContract;
 import dagger.Module;
@@ -21,13 +22,20 @@ public class ChoiceModule {
         this.view = view;
     }
 
+    @FragmentScope
     @Provides
     ViewContract.ChoiceListView provideChoiceListView(){
         return this.view;
     }
 
+    @FragmentScope
     @Provides
-    ModelContract.ChoiceListModel provideChoiceListModel(ModelContract.ChoiceListModel model){
-        return model;
+    ChoiceListPresenter provideChoiceListPresenter(){
+        return new ChoiceListPresenter(this.view);
+    }
+    @FragmentScope
+    @Provides
+    ChoiceListModel provideChoiceListModel(){
+        return new ChoiceListModel();
     }
 }

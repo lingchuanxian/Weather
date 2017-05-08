@@ -1,32 +1,50 @@
 package cn.smlcx.weather.Base;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.View;
 
 /**
  * Created by lcx on 2017/5/4
  * 万能的Viewholder
  */
-public class BaseViewHolder extends RecyclerView.ViewHolder {
+public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener{
+    protected OnViewClickListener mOnViewClickListener = null;
+    protected final String TAG = this.getClass().getSimpleName();
+    public BaseViewHolder(View itemView) {
+        super(itemView);
+        itemView.setOnClickListener(this);//点击事件
+        //AutoUtils.autoSize(itemView);//适配
+        //KnifeUtil.bindTarget(this, itemView);//绑定
+    }
+    /**
+     * 设置数据
+     * 刷新界面
+     *
+     * @param
+     * @param position
+     */
+    public abstract void setData(T data, int position);
 
-    private SparseArray<View> views;
 
-    public BaseViewHolder(View view) {
-        super(view);
-        this.views = new SparseArray<>();
+    /**
+     * 释放资源
+     */
+    protected void onRelease(){
+
     }
 
-    public <T extends View> T getView(int viewId) {
-        View view = views.get(viewId);
-        if (view == null) {
-            view = itemView.findViewById(viewId);
-            views.put(viewId, view);
+    @Override
+    public void onClick(View view) {
+        if (mOnViewClickListener != null) {
+            mOnViewClickListener.onViewClick(view, this.getPosition());
         }
-        return (T) view;
     }
 
-    public View getRootView() {
-        return itemView;
+    public interface OnViewClickListener {
+        void onViewClick(View view, int position);
+    }
+
+    public void setOnItemClickListener(OnViewClickListener listener) {
+        this.mOnViewClickListener = listener;
     }
 }

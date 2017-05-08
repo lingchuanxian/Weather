@@ -1,7 +1,5 @@
 package cn.smlcx.weather.api;
 
-import java.util.List;
-
 import cn.smlcx.weather.Bean.ChoiceBean;
 import cn.smlcx.weather.Bean.HttpResult;
 import retrofit2.http.GET;
@@ -14,5 +12,5 @@ import rx.Observable;
 
 public interface ApiService {
     @GET("/weixin/query")
-    Observable<HttpResult<ChoiceBean>> getChoiceList(@Query("key") String key, @Query("pno") int pno, @Query("ps") int ps);;
+    Observable<HttpResult<HttpResult.ResultBean<ChoiceBean>>> getChoiceList(@Query("key") String key, @Query("pno") int pno, @Query("ps") int ps);;
 }

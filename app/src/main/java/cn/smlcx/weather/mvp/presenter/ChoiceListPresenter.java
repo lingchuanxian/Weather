@@ -4,12 +4,13 @@ import android.util.Log;
 
 import javax.inject.Inject;
 
-import cn.smlcx.weather.Base.BaseModel;
 import cn.smlcx.weather.Base.BasePresenter;
-import cn.smlcx.weather.Base.BaseView;
 import cn.smlcx.weather.Bean.ChoiceBean;
 import cn.smlcx.weather.Bean.HttpResult;
-import cn.smlcx.weather.mvp.model.ModelContract;
+import cn.smlcx.weather.api.ApiService;
+import cn.smlcx.weather.api.RetrofitWrapper;
+import cn.smlcx.weather.di.scope.ActivityScope;
+import cn.smlcx.weather.mvp.model.ChoiceListModel;
 import cn.smlcx.weather.mvp.view.ViewContract;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -19,25 +20,25 @@ import rx.schedulers.Schedulers;
 /**
  * Created by Administrator on 2017/5/6.
  */
-
-public class ChoiceListPresenter extends BasePresenter<ModelContract.ChoiceListModel,ViewContract.ChoiceListView>{
+@ActivityScope
+public class ChoiceListPresenter extends BasePresenter<ChoiceListModel,ViewContract.ChoiceListView>{
     @Inject
-    public ChoiceListPresenter(ModelContract.ChoiceListModel model, ViewContract.ChoiceListView rootView) {
-        super(model, rootView);
+    public ChoiceListPresenter(ViewContract.ChoiceListView rootView) {
+        super(rootView);
     }
 
     public void requestChoiceList(String key, int pno, int ps){
-        mModel.getChoiceList(key,pno,ps)
+        RetrofitWrapper.getInstance().create(ApiService.class).getChoiceList(key,pno,ps)
                 .subscribeOn(Schedulers.newThread())//请求在新的线程中执行
                 .observeOn(Schedulers.io())         //请求完成后在io线程中执行
-                .doOnNext(new Action1<HttpResult<ChoiceBean>>(){
+                .doOnNext(new Action1<HttpResult<HttpResult.ResultBean<ChoiceBean>>>(){
                     @Override
-                    public void call(HttpResult<ChoiceBean> result) {
+                    public void call(HttpResult<HttpResult.ResultBean<ChoiceBean>> result) {
 
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
-                .subscribe(new Subscriber<HttpResult<ChoiceBean>>() {
+                .subscribe(new Subscriber<HttpResult<HttpResult.ResultBean<ChoiceBean>>>() {
                     @Override
                     public void onCompleted() {
                         Log.e("result", "complete");
@@ -49,9 +50,11 @@ public class ChoiceListPresenter extends BasePresenter<ModelContract.ChoiceListM
                     }
 
                     @Override
-                    public void onNext(HttpResult<ChoiceBean> result) {
-
+                    public void onNext(HttpResult<HttpResult.ResultBean<ChoiceBean>> result) {
+                        Log.e("result",result.toString());
+                        mRootView.showChoiceList(result);
                     }
                 });
+
     }
 }

@@ -18,7 +18,9 @@ import cn.smlcx.weather.app.App;
  */
 
 public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity{
+    @Inject
     protected P mPresenter;
+
     public Context mContext;
     public App app;
     private Unbinder mUnbinder;
@@ -76,6 +78,5 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected void onDestroy() {
         super.onDestroy();
         mUnbinder.unbind();
-
     }
 }

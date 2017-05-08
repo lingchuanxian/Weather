@@ -1,9 +1,5 @@
 package cn.smlcx.weather.mvp.presenter;
 
-import cn.smlcx.weather.Base.BasePresenter;
-import cn.smlcx.weather.mvp.model.ModelContract;
-import cn.smlcx.weather.mvp.view.ViewContract;
-
 /**
  * Created by lcx on 2017/5/5.
  */
