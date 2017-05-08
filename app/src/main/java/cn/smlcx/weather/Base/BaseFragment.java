@@ -11,9 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.smlcx.weather.R;
+import cn.smlcx.weather.mvp.presenter.ChoiceListPresenter;
 
 import static cn.smlcx.weather.R.id.toolbar;
 
@@ -22,7 +25,9 @@ import static cn.smlcx.weather.R.id.toolbar;
  */
 
 public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
-    protected final String TAG = this.getClass().getSimpleName();
+    @Inject
+    public P mPresenter;
+
     public Toolbar mToolbar;
     public Context mContext;
     public View view;
@@ -45,7 +50,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.mipmap.ic_drawer_home);
 
-        Log.e(TAG, "onCreateView");
     }
 
     protected abstract int attachLayoutRes();

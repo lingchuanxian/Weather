@@ -7,22 +7,27 @@ import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cn.smlcx.weather.app.App;
 
 /**
  * Created by lcx on 2017/5/4.
  */
 
-public abstract class BaseActivity extends AppCompatActivity{
+public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity{
+    protected P mPresenter;
     public Context mContext;
     public App app;
+    private Unbinder mUnbinder;
     //public  Toolbar mToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(attachLayoutRes());
-        ButterKnife.bind(this);
+        mUnbinder = ButterKnife.bind(this);
         init();
         initViews();
         initData();
@@ -62,9 +67,15 @@ public abstract class BaseActivity extends AppCompatActivity{
      */
     protected abstract void initData();
 
+    /**
+     * 创建presenter
+     */
+    protected abstract void createPresenter();
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mUnbinder.unbind();
+
     }
 }

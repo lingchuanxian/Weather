@@ -4,30 +4,23 @@ import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
 /**
- * Created by Nicholas on 2016/10/30.
+ * Created by lcx on 2017/5/5
+ * MVP框架的简单封装 P处理层
  */
+public class BasePresenter<M extends BaseModel,V extends BaseView> {
+    protected final String TAG = this.getClass().getSimpleName();
 
-public class BasePresenter<V extends BaseView, M extends BaseModel> {
-
-    protected V mView;
     protected M mModel;
+    protected V mRootView;
 
-    private CompositeSubscription mCompositeSubscription;
 
-    protected void addSubscribe(Subscription subscription) {
-        if (mCompositeSubscription == null) {
-            mCompositeSubscription = new CompositeSubscription();
-        }
-        mCompositeSubscription.add(subscription);
+    public BasePresenter(M model, V rootView) {
+        this.mModel = model;
+        this.mRootView = rootView;
     }
 
-    public void unSubscribe() {
-        if (mView != null) {
-            mView = null;
-        }
-        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
-            mCompositeSubscription.clear();
-        }
+    public BasePresenter(V rootView) {
+        this.mRootView = rootView;
     }
 
 }

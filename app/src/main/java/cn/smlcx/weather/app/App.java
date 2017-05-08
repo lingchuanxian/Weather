@@ -14,17 +14,17 @@ import java.util.List;
 
 public class App extends Application{
     protected final String TAG = this.getClass().getSimpleName();
-    private static App app;
+    private static App instance;
     private List<Activity> activityList = new ArrayList<Activity>();
 
     @Override
     public void onCreate() {
         super.onCreate();
-        app = this;
+        instance = this;
         LeakCanary.install(this);
     }
     public static App getInstance() {
-        return app;
+        return instance;
     }
 
     public void addActivity(Activity activity){

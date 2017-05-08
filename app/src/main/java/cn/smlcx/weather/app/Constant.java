@@ -5,5 +5,5 @@ package cn.smlcx.weather.app;
  */
 
 public class Constant {
-    public final static String IP = "http://222.76.48.77:9081/ajj_oa_test";//外网
+    public final static String IP = "http://v.juhe.cn";//外网
 }
