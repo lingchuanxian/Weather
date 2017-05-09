@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import cn.smlcx.weather.Base.BaseModel;
 import cn.smlcx.weather.Bean.ChoiceBean;
-import cn.smlcx.weather.Bean.HttpResult;
 import cn.smlcx.weather.api.ApiService;
 import cn.smlcx.weather.api.RetrofitWrapper;
 import cn.smlcx.weather.di.scope.ActivityScope;
@@ -20,7 +19,7 @@ public class ChoiceListModel extends BaseModel implements ModelContract.ChoiceLi
     }
 
     @Override
-    public Observable<HttpResult<HttpResult.ResultBean<ChoiceBean>>> getChoiceList(String key, int pno, int ps) {
+    public Observable<ChoiceBean> getChoiceList(String key, int pno, int ps) {
 
         return RetrofitWrapper.getInstance().create(ApiService.class).getChoiceList(key,pno,ps);
     }

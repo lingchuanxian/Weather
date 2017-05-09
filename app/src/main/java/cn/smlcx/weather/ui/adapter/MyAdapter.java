@@ -29,9 +29,9 @@ import cn.smlcx.weather.R;
  */
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implements View.OnClickListener{
     protected final String TAG = this.getClass().getSimpleName();
-    private List<ChoiceBean> mDataList;
+    private List<ChoiceBean.ResultBean.ListBean> mDataList;
 
-    public MyAdapter(List<ChoiceBean> list) {
+    public MyAdapter(List<ChoiceBean.ResultBean.ListBean> list) {
         mDataList = list;
     }
 

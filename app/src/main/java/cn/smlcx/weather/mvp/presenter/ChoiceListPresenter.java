@@ -8,7 +8,6 @@ import javax.inject.Inject;
 
 import cn.smlcx.weather.Base.BasePresenter;
 import cn.smlcx.weather.Bean.ChoiceBean;
-import cn.smlcx.weather.Bean.HttpResult;
 import cn.smlcx.weather.api.ApiService;
 import cn.smlcx.weather.api.RetrofitWrapper;
 import cn.smlcx.weather.di.scope.ActivityScope;
@@ -33,14 +32,14 @@ public class ChoiceListPresenter extends BasePresenter<ChoiceListModel,ViewContr
         RetrofitWrapper.getInstance().create(ApiService.class).getChoiceList(key,pno,ps)
                 .subscribeOn(Schedulers.newThread())//请求在新的线程中执行
                 .observeOn(Schedulers.io())         //请求完成后在io线程中执行
-                .doOnNext(new Action1<HttpResult<HttpResult.ResultBean<ChoiceBean>>>(){
+                .doOnNext(new Action1<ChoiceBean>(){
                     @Override
-                    public void call(HttpResult<HttpResult.ResultBean<ChoiceBean>> result) {
+                    public void call(ChoiceBean result) {
 
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
-                .subscribe(new Subscriber<HttpResult<HttpResult.ResultBean<ChoiceBean>>>() {
+                .subscribe(new Subscriber<ChoiceBean>() {
                     @Override
                     public void onCompleted() {
                         Log.e("result", "complete");
@@ -52,13 +51,8 @@ public class ChoiceListPresenter extends BasePresenter<ChoiceListModel,ViewContr
                     }
 
                     @Override
-                    public void onNext(HttpResult<HttpResult.ResultBean<ChoiceBean>> result) {
-                        Log.e("result",result.toString());
-                        List<ChoiceBean> list = result.getResult().getList();
-                        for(ChoiceBean choice:list){
-                            choice.setFirstImg("");
-                        }
-                        Log.e(TAG, "list-size:"+list.size() );
+                    public void onNext(ChoiceBean result) {
+                        List<ChoiceBean.ResultBean.ListBean> list = result.getResult().getList();
                         mRootView.showChoiceList(list);
                     }
                 });

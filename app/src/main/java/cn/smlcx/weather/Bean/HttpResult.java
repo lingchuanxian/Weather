@@ -9,7 +9,7 @@ import java.util.List;
 public class HttpResult<T> {
 
     private String reason;
-    private ResultBean result;
+    private ResultBean<T> result;
     private int error_code;
 
     public String getReason() {

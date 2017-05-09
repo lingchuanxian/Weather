@@ -15,15 +15,15 @@ import cn.smlcx.weather.ui.holder.ChoiceItemHolder;
  * Created by lcx on 2017/5/6 12:57
  * Contact with jess.yan.effort@gmail.com
  */
-public class ChoiceAdapter extends BaseRecyclerViewAdapter<ChoiceBean> {
+public class ChoiceAdapter extends BaseRecyclerViewAdapter<ChoiceBean.ResultBean.ListBean> {
 
-    public ChoiceAdapter(List<ChoiceBean> infos) {
+    public ChoiceAdapter(List<ChoiceBean.ResultBean.ListBean> infos) {
         super(infos);
         Log.e("adapter","进入适配器");
     }
 
     @Override
-    public BaseViewHolder<ChoiceBean> getHolder(View v, int viewType) {
+    public BaseViewHolder<ChoiceBean.ResultBean.ListBean> getHolder(View v, int viewType) {
         Log.e("adapter","进入getHolder");
         return new ChoiceItemHolder(v);
     }

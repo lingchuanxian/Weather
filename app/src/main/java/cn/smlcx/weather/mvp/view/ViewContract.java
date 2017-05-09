@@ -4,7 +4,6 @@ import java.util.List;
 
 import cn.smlcx.weather.Base.BaseView;
 import cn.smlcx.weather.Bean.ChoiceBean;
-import cn.smlcx.weather.Bean.HttpResult;
 
 /**
  * Created by lcx on 2017/5/5.
@@ -12,6 +11,6 @@ import cn.smlcx.weather.Bean.HttpResult;
 
 public interface ViewContract {
     interface ChoiceListView extends BaseView{
-        void showChoiceList(List<ChoiceBean> result);
+        void showChoiceList(List<ChoiceBean.ResultBean.ListBean> result);
     }
 }

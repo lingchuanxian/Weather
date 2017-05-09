@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.smlcx.weather.R;
-import cn.smlcx.weather.mvp.presenter.ChoiceListPresenter;
 
 import static cn.smlcx.weather.R.id.toolbar;
 
@@ -49,7 +47,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.mipmap.ic_drawer_home);
-
     }
 
     protected abstract int attachLayoutRes();
