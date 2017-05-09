@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import java.util.List;
 
 import cn.smlcx.weather.Bean.ChoiceBean;
+import cn.smlcx.weather.utils.ToastUtil;
 
 /**
  * Created by jess on 2015/11/27.

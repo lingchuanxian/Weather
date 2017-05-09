@@ -3,17 +3,19 @@ package cn.smlcx.weather.ui.fragment;
 
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.paginate.Paginate;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.smlcx.weather.Base.BaseFragment;
 import cn.smlcx.weather.Base.BaseRecyclerViewAdapter;
@@ -25,17 +27,18 @@ import cn.smlcx.weather.mvp.presenter.ChoiceListPresenter;
 import cn.smlcx.weather.mvp.view.ViewContract;
 import cn.smlcx.weather.ui.activity.DetailActivity;
 import cn.smlcx.weather.ui.adapter.ChoiceAdapter;
+import cn.smlcx.weather.widget.SwipeRefreshView;
 
-public class ChoiceFragment extends BaseFragment<ChoiceListPresenter> implements ViewContract.ChoiceListView,SwipeRefreshLayout.OnRefreshListener{
+public class ChoiceFragment extends BaseFragment<ChoiceListPresenter> implements ViewContract.ChoiceListView, SwipeRefreshLayout.OnRefreshListener {
     protected final String TAG = this.getClass().getSimpleName();
-    @Inject
-    ChoiceListPresenter mChoiceListPresenter;
     @BindView(R.id.choice_list)
-    RecyclerView mChoiceList;
+    RecyclerView mRecycleView;
     Unbinder unbinder;
-    private List<ChoiceBean.ResultBean.ListBean> mChoice = new ArrayList<>();
-
-    private ChoiceAdapter mAdapter;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    Unbinder unbinder1;
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
     @Override
     protected int attachLayoutRes() {
         return R.layout.fragment_choice;
@@ -49,26 +52,40 @@ public class ChoiceFragment extends BaseFragment<ChoiceListPresenter> implements
                 .choiceModule(new ChoiceModule(this))
                 .build()
                 .inject(this);
-        mPresenter.requestChoiceList("d975b5fe029c0691fe5d683cb68b86ac", 1, 20);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecycleView.setLayoutManager(linearLayoutManager);
+       /* mAdapter = new ChoiceAdapter(mChoice);
+        mRecycleView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int viewType, Object data, int position) {
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("url", ((ChoiceBean.ResultBean.ListBean) data).getUrl());
+                intent.putExtra("title", ((ChoiceBean.ResultBean.ListBean) data).getTitle());
+                startActivity(intent);
+            }
+        });*/
     }
 
     @Override
     protected void initData() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        mChoiceList.setLayoutManager(linearLayoutManager);
-        mAdapter = new ChoiceAdapter(mChoice);
-        mChoiceList.setAdapter(mAdapter);
+        mPresenter.requestChoiceList(true);
+    }
 
+    @Override
+    public void onRefresh() {
+        mPresenter.requestChoiceList(true);
     }
 
     @Override
     public void showLoding(String msg) {
-
+        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideLoding() {
-
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -77,19 +94,66 @@ public class ChoiceFragment extends BaseFragment<ChoiceListPresenter> implements
     }
 
     @Override
-    public void showChoiceList(List<ChoiceBean.ResultBean.ListBean> result) {
-        Log.e(TAG, "showChoiceList的长度为： "+result.size());
-        mChoice.addAll(result);
-        mAdapter.notifyDataSetChanged();
-        mAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener() {
+    public void showChoiceList(BaseRecyclerViewAdapter mAdapter) {
+        mRecycleView.setAdapter(mAdapter);
+        initPaginate();
+        initRecycleView();
+
+       /* mAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int viewType, Object data, int position) {
-                Log.e(TAG, "onItemClick: " );
-                Intent intent= new Intent(mContext, DetailActivity.class);
-                intent.putExtra("url",((ChoiceBean.ResultBean.ListBean)data).getUrl());
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("url", ((ChoiceBean.ResultBean.ListBean) data).getUrl());
+                intent.putExtra("title", ((ChoiceBean.ResultBean.ListBean) data).getTitle());
                 startActivity(intent);
             }
-        });
+        });*/
+    }
+
+    @Override
+    public void startLoadMore() {
+        isLoadingMore = true;
+    }
+
+    @Override
+    public void endLoadMore() {
+        isLoadingMore = false;
+    }
+
+    /**
+     * 初始化Paginate,用于加载更多
+     */
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.requestChoiceList(false);
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return false;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return false;
+                }
+            };
+
+            mPaginate = Paginate.with(mRecycleView, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
+    }
+
+    /**
+     * 初始化RecycleView
+     */
+    private void initRecycleView() {
+        mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -97,10 +161,4 @@ public class ChoiceFragment extends BaseFragment<ChoiceListPresenter> implements
         super.onDestroyView();
         unbinder.unbind();
     }
-
-    @Override
-    public void onRefresh() {
-        mPresenter.requestChoiceList("d975b5fe029c0691fe5d683cb68b86ac", 1, 20);
-    }
-
 }

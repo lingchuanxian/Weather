@@ -2,23 +2,30 @@ package cn.smlcx.weather.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.smlcx.weather.Base.BaseActivity;
 import cn.smlcx.weather.R;
+import cn.smlcx.weather.widget.LoadingWebView;
 
 /**
  * Created by lcx on 2017/5/9.
  */
 
 public class DetailActivity extends BaseActivity {
+    protected final String TAG = this.getClass().getSimpleName();
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.webView)
-    WebView mWebView;
-
+    LoadingWebView mWebView;
+    private String url;
+    private String title;
     @Override
     protected int attachLayoutRes() {
         return R.layout.common_detail;
@@ -26,13 +33,24 @@ public class DetailActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
+        url = (String) getIntent().getExtras().get("url");
+        title = (String) getIntent().getExtras().get("title");
+        mToolbar.setTitle(title);
         setSupportActionBar(mToolbar);
-        mToolbar.setNavigationIcon(R.mipmap.ic_drawer_home);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
     }
 
     @Override
     protected void initData() {
-
+        mWebView.loadMessageUrl(url);
+        mWebView.addProgressBar();
     }
 
     @Override

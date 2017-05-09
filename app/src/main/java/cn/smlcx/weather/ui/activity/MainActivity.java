@@ -27,7 +27,7 @@ public class MainActivity extends BaseActivity<ChoiceListPresenter>{
         mViewPager.setAdapter(new MainAdapter(getSupportFragmentManager()));
         mAlphaIndicator.setViewPager(mViewPager);
         mViewPager.setOffscreenPageLimit(3);
-
+        mViewPager.setCurrentItem(1);
 
        /* ChoiceComponent component = DaggerChoiceComponent.builder().choiceModule(new ChoiceModule()).build();
         component.inject(this);*/
