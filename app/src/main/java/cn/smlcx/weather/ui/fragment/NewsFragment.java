@@ -19,4 +19,8 @@ public class NewsFragment extends BaseFragment {
     protected void initData() {
 
     }
+    @Override
+    protected void initInjector() {
+
+    }
 }

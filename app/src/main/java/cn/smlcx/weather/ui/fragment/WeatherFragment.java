@@ -19,4 +19,8 @@ public class WeatherFragment extends BaseFragment {
     protected void initData() {
 
     }
+    @Override
+    protected void initInjector() {
+
+    }
 }

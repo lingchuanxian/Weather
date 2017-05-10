@@ -16,9 +16,9 @@ import cn.smlcx.weather.ui.fragment.WeatherFragment;
  * Created by lcx on 2017/5/5.
  */
 
-public class MainAdapter extends FragmentPagerAdapter {
+public class ViewPageAdapter extends FragmentPagerAdapter {
     private List<Fragment> fragments = new ArrayList<>();
-    public MainAdapter(FragmentManager fm) {
+    public ViewPageAdapter(FragmentManager fm) {
         super(fm);
         WeatherFragment wf = new WeatherFragment();
         ChoiceFragment cf = new ChoiceFragment();

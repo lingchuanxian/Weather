@@ -6,12 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.Gson;
-
 import java.util.List;
-
-import cn.smlcx.weather.Bean.ChoiceBean;
-import cn.smlcx.weather.utils.ToastUtil;
 
 /**
  * Created by jess on 2015/11/27.
@@ -57,9 +52,6 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
     @Override
     public void onBindViewHolder(BaseViewHolder<T> holder, int position) {
         Log.e("adapter","进入onBindViewHolder");
-       /* Gson gosn = new Gson();
-        ChoiceBean cb = gosn.fromJson(mInfos.get(position).toString(),ChoiceBean.class);
-        Log.e("adapter", "onBindViewHolder: "+cb.toString());*/
         holder.setData(mInfos.get(position), position);
     }
 

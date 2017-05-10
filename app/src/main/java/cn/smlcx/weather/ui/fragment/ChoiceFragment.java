@@ -1,44 +1,42 @@
 package cn.smlcx.weather.ui.fragment;
 
-
-import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-
-import com.paginate.Paginate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.smlcx.weather.Base.BaseAdapter;
 import cn.smlcx.weather.Base.BaseFragment;
-import cn.smlcx.weather.Base.BaseRecyclerViewAdapter;
 import cn.smlcx.weather.Bean.ChoiceBean;
 import cn.smlcx.weather.R;
 import cn.smlcx.weather.di.component.DaggerChoiceComponent;
 import cn.smlcx.weather.di.module.ChoiceModule;
 import cn.smlcx.weather.mvp.presenter.ChoiceListPresenter;
 import cn.smlcx.weather.mvp.view.ViewContract;
-import cn.smlcx.weather.ui.activity.DetailActivity;
-import cn.smlcx.weather.ui.adapter.ChoiceAdapter;
-import cn.smlcx.weather.widget.SwipeRefreshView;
+import cn.smlcx.weather.ui.adapter.TestAdapter;
+import cn.smlcx.weather.widget.EmptyLayout;
+
+import static cn.smlcx.weather.R.id.swipeRefreshLayout;
 
 public class ChoiceFragment extends BaseFragment<ChoiceListPresenter> implements ViewContract.ChoiceListView, SwipeRefreshLayout.OnRefreshListener {
     protected final String TAG = this.getClass().getSimpleName();
     @BindView(R.id.choice_list)
     RecyclerView mRecycleView;
-    Unbinder unbinder;
-    @BindView(R.id.swipeRefreshLayout)
+    @BindView(swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
+    Unbinder unbinder;
+    @BindView(R.id.empty_layout)
+    EmptyLayout mEmptyLayout;
     Unbinder unbinder1;
-    private Paginate mPaginate;
-    private boolean isLoadingMore;
+    private BaseAdapter mAdapter;
+    private List<ChoiceBean.ResultBean.ListBean> mData = new ArrayList<>();
+    private int pageIndex = 1;
+    boolean isLoading;
+
     @Override
     protected int attachLayoutRes() {
         return R.layout.fragment_choice;
@@ -47,45 +45,39 @@ public class ChoiceFragment extends BaseFragment<ChoiceListPresenter> implements
     @Override
     protected void initViews() {
         mToolbar.setTitle("微信精选");
+        initRecycleView();
+        mAdapter = new TestAdapter(getActivity(), mData);
+        mRecycleView.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected void initData() {
+        mPresenter.requestChoiceList(1);
+    }
+
+    @Override
+    protected void initInjector() {
         DaggerChoiceComponent
                 .builder()
                 .choiceModule(new ChoiceModule(this))
                 .build()
                 .inject(this);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        mRecycleView.setLayoutManager(linearLayoutManager);
-       /* mAdapter = new ChoiceAdapter(mChoice);
-        mRecycleView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, int viewType, Object data, int position) {
-                Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra("url", ((ChoiceBean.ResultBean.ListBean) data).getUrl());
-                intent.putExtra("title", ((ChoiceBean.ResultBean.ListBean) data).getTitle());
-                startActivity(intent);
-            }
-        });*/
-    }
-
-    @Override
-    protected void initData() {
-        mPresenter.requestChoiceList(true);
     }
 
     @Override
     public void onRefresh() {
-        mPresenter.requestChoiceList(true);
+        pageIndex = 1;
+        mPresenter.requestChoiceList(pageIndex);
     }
 
     @Override
-    public void showLoding(String msg) {
-        mSwipeRefreshLayout.setRefreshing(true);
+    public void showLoding() {
+        mEmptyLayout.setEmptyStatus(EmptyLayout.STATUS_LOADING);
     }
 
     @Override
     public void hideLoding() {
-        mSwipeRefreshLayout.setRefreshing(false);
+        mEmptyLayout.hide();
     }
 
     @Override
@@ -94,66 +86,42 @@ public class ChoiceFragment extends BaseFragment<ChoiceListPresenter> implements
     }
 
     @Override
-    public void showChoiceList(BaseRecyclerViewAdapter mAdapter) {
-        mRecycleView.setAdapter(mAdapter);
-        initPaginate();
-        initRecycleView();
-
-       /* mAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, int viewType, Object data, int position) {
-                Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra("url", ((ChoiceBean.ResultBean.ListBean) data).getUrl());
-                intent.putExtra("title", ((ChoiceBean.ResultBean.ListBean) data).getTitle());
-                startActivity(intent);
-            }
-        });*/
-    }
-
-    @Override
-    public void startLoadMore() {
-        isLoadingMore = true;
-    }
-
-    @Override
-    public void endLoadMore() {
-        isLoadingMore = false;
-    }
-
-    /**
-     * 初始化Paginate,用于加载更多
-     */
-    private void initPaginate() {
-        if (mPaginate == null) {
-            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
-                @Override
-                public void onLoadMore() {
-                    mPresenter.requestChoiceList(false);
-                }
-
-                @Override
-                public boolean isLoading() {
-                    return false;
-                }
-
-                @Override
-                public boolean hasLoadedAllItems() {
-                    return false;
-                }
-            };
-
-            mPaginate = Paginate.with(mRecycleView, callbacks)
-                    .setLoadingTriggerThreshold(0)
-                    .build();
-            mPaginate.setHasMoreDataToLoad(false);
+    public void showChoiceList(List<ChoiceBean.ResultBean.ListBean> mList) {
+        if (pageIndex == 1) {
+            mData.clear();
         }
+        mAdapter.addAll(mList);
+        mSwipeRefreshLayout.setRefreshing(false);
+        isLoading = false;
+        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
     }
 
     /**
      * 初始化RecycleView
      */
     private void initRecycleView() {
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecycleView.setLayoutManager(linearLayoutManager);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        mRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
+                if (lastVisibleItemPosition + 1 == mAdapter.getItemCount()) {
+                    boolean isRefreshing = mSwipeRefreshLayout.isRefreshing();
+                    if (isRefreshing) {
+                        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
+                        return;
+                    }
+                    if (!isLoading) {
+                        isLoading = true;
+                        pageIndex++;
+                        mPresenter.requestChoiceList(pageIndex);
+                    }
+                }
+            }
+        });
     }
 
     @Override

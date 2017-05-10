@@ -19,4 +19,8 @@ public class PersonalFragment extends BaseFragment {
     protected void initData() {
 
     }
+    @Override
+    protected void initInjector() {
+
+    }
 }

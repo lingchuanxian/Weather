@@ -7,9 +7,8 @@ package cn.smlcx.weather.Base;
 public interface BaseView {
     /**
      * 显示进度条
-     * @param msg   进度条加载内容
      */
-    void showLoding(String msg);
+    void showLoding();
     /**
      * 隐藏进度条
      */

@@ -31,6 +31,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         setContentView(attachLayoutRes());
         mUnbinder = ButterKnife.bind(this);
         init();
+        initInjector();
         initViews();
         initData();
     }
@@ -73,6 +74,11 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
      * 创建presenter
      */
     protected abstract void createPresenter();
+
+    /**
+     * 初始化dagger2
+     */
+    protected abstract void initInjector();
 
     @Override
     protected void onDestroy() {

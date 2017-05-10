@@ -8,7 +8,7 @@ import butterknife.BindView;
 import cn.smlcx.weather.Base.BaseActivity;
 import cn.smlcx.weather.R;
 import cn.smlcx.weather.mvp.presenter.ChoiceListPresenter;
-import cn.smlcx.weather.ui.adapter.MainAdapter;
+import cn.smlcx.weather.ui.adapter.ViewPageAdapter;
 
 public class MainActivity extends BaseActivity<ChoiceListPresenter>{
     protected final String TAG = this.getClass().getSimpleName();
@@ -24,24 +24,22 @@ public class MainActivity extends BaseActivity<ChoiceListPresenter>{
 
     @Override
     protected void initViews() {
-        mViewPager.setAdapter(new MainAdapter(getSupportFragmentManager()));
+        mViewPager.setAdapter(new ViewPageAdapter(getSupportFragmentManager()));
         mAlphaIndicator.setViewPager(mViewPager);
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setCurrentItem(1);
-
-       /* ChoiceComponent component = DaggerChoiceComponent.builder().choiceModule(new ChoiceModule()).build();
-        component.inject(this);*/
     }
 
     @Override
     protected void initData() {
-        //RetrofitWrapper.getInstance().create()
-       // mPresenter.requestChoiceList("d975b5fe029c0691fe5d683cb68b86ac",1,2);
     }
 
     @Override
     protected void createPresenter() {
 
     }
+    @Override
+    protected void initInjector() {
 
+    }
 }

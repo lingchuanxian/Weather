@@ -36,6 +36,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
         view = inflater.inflate(attachLayoutRes(), container, false);
         unbinder = ButterKnife.bind(this,view);
         init();
+        initInjector();
         initViews();
         initData();
         return view;
@@ -59,6 +60,11 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
      * 初始化数据
      */
     protected abstract void initData();
+
+    /**
+     * 初始化dagger2
+     */
+    protected abstract void initInjector();
 
     @Override
     public void onDestroyView() {

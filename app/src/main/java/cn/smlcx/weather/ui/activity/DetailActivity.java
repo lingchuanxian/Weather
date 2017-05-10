@@ -1,15 +1,9 @@
 package cn.smlcx.weather.ui.activity;
 
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.smlcx.weather.Base.BaseActivity;
 import cn.smlcx.weather.R;
 import cn.smlcx.weather.widget.LoadingWebView;
@@ -59,9 +53,7 @@ public class DetailActivity extends BaseActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
+    protected void initInjector() {
+
     }
 }
