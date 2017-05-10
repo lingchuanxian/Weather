@@ -1,35 +1,43 @@
 package cn.smlcx.weather.ui.adapter;
 
-import android.util.Log;
-import android.view.View;
+import android.content.Context;
+import android.content.Intent;
 
 import java.util.List;
 
-import cn.smlcx.weather.Base.BaseRecyclerViewAdapter;
-import cn.smlcx.weather.Base.BaseViewHolder;
+import cn.smlcx.weather.Base.BaseAdapter;
 import cn.smlcx.weather.Bean.ChoiceBean;
 import cn.smlcx.weather.R;
-import cn.smlcx.weather.ui.holder.ChoiceItemHolder;
+import cn.smlcx.weather.ui.activity.DetailActivity;
 
 /**
- * Created by lcx on 2017/5/6 12:57
- * Contact with jess.yan.effort@gmail.com
+ * Created by lcx on 2017/5/10.
  */
-public class ChoiceAdapter extends BaseRecyclerViewAdapter<ChoiceBean.ResultBean.ListBean> {
 
-    public ChoiceAdapter(List<ChoiceBean.ResultBean.ListBean> infos) {
-        super(infos);
-        Log.e("adapter","进入适配器");
+public class ChoiceAdapter extends BaseAdapter<ChoiceBean.ResultBean.ListBean>{
+
+    public ChoiceAdapter(Context context, List<ChoiceBean.ResultBean.ListBean> beans) {
+        super(context, beans);
     }
 
     @Override
-    public BaseViewHolder<ChoiceBean.ResultBean.ListBean> getHolder(View v, int viewType) {
-        Log.e("adapter","进入getHolder");
-        return new ChoiceItemHolder(v);
+    protected void onBindDataToView(CommonViewHolder holder, ChoiceBean.ResultBean.ListBean bean) {
+        holder.setImageFromInternet(R.id.c_img,bean.getFirstImg());
+        holder.setText(R.id.c_title,bean.getTitle());
+        holder.setText(R.id.c_content,"来源:"+bean.getSource());
     }
 
     @Override
-    public int getLayoutId(int viewType) {
+    public int getItemLayoutID(int viewType) {
         return R.layout.choice_item;
     }
+
+    @Override
+    protected void onItemClick(int position) {
+        Intent intent = new Intent(mContext, DetailActivity.class);
+        intent.putExtra("url", mBeans.get(position).getUrl());
+        intent.putExtra("title", mBeans.get(position).getTitle());
+        mContext.startActivity(intent);
+    }
+
 }

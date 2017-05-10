@@ -34,6 +34,11 @@ android {
             task.enabled = false
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -67,7 +72,7 @@ dependencies {
     //沉浸式状态栏
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
 
-    compile 'com.lzy.widget:view-core:0.1.5'
+    compile 'com.yinglan.alphatabs:library:1.0.5'
 
     //Dagger2 的依赖
     apt 'com.google.dagger:dagger-compiler:2.6'

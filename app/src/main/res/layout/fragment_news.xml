@@ -13,12 +13,21 @@
              tools:layout_editor_absoluteY="0dp"
              tools:layout_editor_absoluteX="8dp"/>
 
-    <TextView
+    <include layout="@layout/layout_common_empty"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="新闻头条"
-        android:textSize="20sp"
-        android:textColor="#000"
-        android:gravity="center"/>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/choice_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/choice_item"
+            />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

@@ -38,7 +38,6 @@ public class DetailActivity extends BaseActivity {
                 finish();
             }
         });
-        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
     }
 
     @Override

@@ -17,7 +17,7 @@ import cn.smlcx.weather.di.component.DaggerChoiceComponent;
 import cn.smlcx.weather.di.module.ChoiceModule;
 import cn.smlcx.weather.mvp.presenter.ChoiceListPresenter;
 import cn.smlcx.weather.mvp.view.ViewContract;
-import cn.smlcx.weather.ui.adapter.TestAdapter;
+import cn.smlcx.weather.ui.adapter.ChoiceAdapter;
 import cn.smlcx.weather.widget.EmptyLayout;
 
 import static cn.smlcx.weather.R.id.swipeRefreshLayout;
@@ -46,7 +46,7 @@ public class ChoiceFragment extends BaseFragment<ChoiceListPresenter> implements
     protected void initViews() {
         mToolbar.setTitle("微信精选");
         initRecycleView();
-        mAdapter = new TestAdapter(getActivity(), mData);
+        mAdapter = new ChoiceAdapter(getActivity(), mData);
         mRecycleView.setAdapter(mAdapter);
     }
 

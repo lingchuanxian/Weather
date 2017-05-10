@@ -2,6 +2,7 @@ package cn.smlcx.weather.mvp.model;
 
 import cn.smlcx.weather.Bean.ChoiceBean;
 import cn.smlcx.weather.Bean.HttpResult;
+import cn.smlcx.weather.Bean.NewsBean;
 import rx.Observable;
 
 /**
@@ -12,5 +13,9 @@ public class ModelContract {
     //Model层定义接口,外部只需关心model返回的数据,无需关心内部细节,及是否使用缓存
     interface ChoiceListModel{
         Observable<ChoiceBean> getChoiceList(String key, int pno, int ps);;
+    }
+
+    interface NewsListModel{
+        Observable<NewsBean> getNewsList(String type,String key);
     }
 }

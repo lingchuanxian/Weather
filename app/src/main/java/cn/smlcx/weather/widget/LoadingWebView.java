@@ -3,6 +3,7 @@ package cn.smlcx.weather.widget;
 import android.content.Context;
 import android.os.Environment;
 import android.util.AttributeSet;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
@@ -19,7 +20,7 @@ public class LoadingWebView extends WebView{
      * 网页缓存目录
      */
     private static final String cacheDirPath = Environment
-            .getExternalStorageDirectory() + "/LoadingWebViewDome/webCache/";
+            .getExternalStorageDirectory() + "/weather/webCache/";
 
     public LoadingWebView(Context context) {
         super(context, null);
@@ -46,6 +47,8 @@ public class LoadingWebView extends WebView{
         getSettings().setDatabasePath(cacheDirPath); //设置数据库缓存路径
         getSettings().setAppCachePath(cacheDirPath);//设置Application Caches缓存目录
         getSettings().setAppCacheEnabled(true);//开启Application Caches功能
+        setVerticalScrollBarEnabled(true);
+        setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
     }
 
     /**
