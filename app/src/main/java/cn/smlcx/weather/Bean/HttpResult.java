@@ -1,12 +1,13 @@
 package cn.smlcx.weather.Bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by lcx on 2017/5/5.
  */
 
-public class HttpResult<T> {
+public class HttpResult<T> implements Serializable {
 
     private String reason;
     private ResultBean<T> result;

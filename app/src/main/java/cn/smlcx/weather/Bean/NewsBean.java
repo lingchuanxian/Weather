@@ -1,12 +1,13 @@
 package cn.smlcx.weather.Bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/5/10.
  */
 
-public class NewsBean {
+public class NewsBean implements Serializable {
 
     /**
      * reason : 成功的返回
