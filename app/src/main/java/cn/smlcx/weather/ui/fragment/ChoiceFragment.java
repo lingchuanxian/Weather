@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.Unbinder;
 import cn.smlcx.weather.Base.BaseAdapter;
@@ -18,7 +20,6 @@ import cn.smlcx.weather.di.module.ChoiceModule;
 import cn.smlcx.weather.mvp.presenter.ChoiceListPresenter;
 import cn.smlcx.weather.mvp.view.ViewContract;
 import cn.smlcx.weather.ui.adapter.ChoiceAdapter;
-import cn.smlcx.weather.widget.EmptyLayout;
 
 import static cn.smlcx.weather.R.id.swipeRefreshLayout;
 
@@ -29,13 +30,13 @@ public class ChoiceFragment extends BaseFragment<ChoiceListPresenter> implements
     @BindView(swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     Unbinder unbinder;
-    @BindView(R.id.empty_layout)
-    EmptyLayout mEmptyLayout;
-    Unbinder unbinder1;
+
     private BaseAdapter mAdapter;
     private List<ChoiceBean.ResultBean.ListBean> mData = new ArrayList<>();
     private int pageIndex = 1;
     boolean isLoading;
+    @Inject
+    ChoiceBean.ResultBean.ListBean data;
 
     @Override
     protected int attachLayoutRes() {
@@ -68,21 +69,6 @@ public class ChoiceFragment extends BaseFragment<ChoiceListPresenter> implements
     public void onRefresh() {
         pageIndex = 1;
         mPresenter.requestChoiceList(pageIndex);
-    }
-
-    @Override
-    public void showLoding() {
-        mEmptyLayout.setEmptyStatus(EmptyLayout.STATUS_LOADING);
-    }
-
-    @Override
-    public void hideLoding() {
-        mEmptyLayout.hide();
-    }
-
-    @Override
-    public void showErr(String err) {
-
     }
 
     @Override

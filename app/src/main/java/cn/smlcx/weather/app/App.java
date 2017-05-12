@@ -8,6 +8,9 @@ import com.squareup.leakcanary.LeakCanary;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.smlcx.weather.di.component.DaggerAppComponent;
+import cn.smlcx.weather.di.module.AppModule;
+
 /**
  * Created by lcx on 2017/5/4.
  */
@@ -22,6 +25,11 @@ public class App extends Application{
         super.onCreate();
         instance = this;
         LeakCanary.install(this);
+        DaggerAppComponent
+                .builder()
+                .appModule(new AppModule(this))
+                .build()
+                .app();
     }
     public static App getInstance() {
         return instance;

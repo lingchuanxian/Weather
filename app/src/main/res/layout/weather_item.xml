@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="50dp"
+              android:paddingLeft="12dp"
+              android:paddingRight="12dp">
+
+    <TextView android:id="@+id/future_date"
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight="1"
+              android:gravity="center"
+              android:text="test"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8"
+        android:gravity="center">
+
+        <ImageView android:id="@+id/future_img01"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/bg_js"/>
+
+        <ImageView android:id="@+id/future_img02"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/bg_js"
+            android:layout_marginLeft="10dp"/>
+
+    </LinearLayout>
+
+    <TextView android:id="@+id/future_temp"
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight="1"
+              android:gravity="center"
+              android:text="test"/>
+
+    <TextView android:id="@+id/future_weather"
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight="1"
+              android:gravity="center"
+              android:text="test"/>
+
+</LinearLayout>

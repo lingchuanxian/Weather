@@ -17,7 +17,7 @@ import cn.smlcx.weather.app.App;
  * Created by lcx on 2017/5/4.
  */
 
-public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity{
+public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements BaseView{
     @Inject
     protected P mPresenter;
 
@@ -83,5 +83,20 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void showLoding() {
+
+    }
+
+    @Override
+    public void hideLoding() {
+
+    }
+
+    @Override
+    public void showErr(String err) {
+
     }
 }

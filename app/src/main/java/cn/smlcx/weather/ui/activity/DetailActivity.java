@@ -38,6 +38,7 @@ public class DetailActivity extends BaseActivity {
                 finish();
             }
         });
+        app.addActivity(this);
     }
 
     @Override

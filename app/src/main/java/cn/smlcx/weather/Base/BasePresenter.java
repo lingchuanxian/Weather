@@ -1,8 +1,5 @@
 package cn.smlcx.weather.Base;
 
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
-
 /**
  * Created by lcx on 2017/5/5
  * MVP框架的简单封装 P处理层
@@ -22,5 +19,6 @@ public class BasePresenter<M extends BaseModel,V extends BaseView> {
     public BasePresenter(V rootView) {
         this.mRootView = rootView;
     }
+
 
 }

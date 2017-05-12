@@ -1,5 +1,7 @@
 package cn.smlcx.weather.ui.fragment;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -13,26 +15,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 import cn.smlcx.weather.Base.BaseFragment;
-import cn.smlcx.weather.Bean.ChoiceBean;
 import cn.smlcx.weather.Bean.WeatherBean;
 import cn.smlcx.weather.R;
-import cn.smlcx.weather.di.component.DaggerChoiceComponent;
 import cn.smlcx.weather.di.component.DaggerWeatherComponent;
-import cn.smlcx.weather.di.module.ChoiceModule;
 import cn.smlcx.weather.di.module.WeatherModule;
-import cn.smlcx.weather.mvp.model.WeatherModel;
 import cn.smlcx.weather.mvp.presenter.WeatherPresenter;
 import cn.smlcx.weather.mvp.view.ViewContract;
+import cn.smlcx.weather.ui.adapter.WeatherAdapter;
 
 
-public class WeatherFragment extends BaseFragment<WeatherPresenter> implements ViewContract.WeatherView{
+public class WeatherFragment extends BaseFragment<WeatherPresenter> implements ViewContract.WeatherView {
     protected final String TAG = this.getClass().getSimpleName();
     public LocationClient mLocationClient = null;
-    Unbinder unbinder;
+    @BindView(R.id.curLocation)
+    TextView mCurLocation;
+    @BindView(R.id.date)
+    TextView mDate;
+    @BindView(R.id.temperature)
+    TextView mTemperature;
+    @BindView(R.id.weather)
+    TextView mWeather;
+    @BindView(R.id.weather_list)
+    RecyclerView mWeatherList;
     private WeatherBean mData = new WeatherBean();
-
+    private WeatherAdapter mAdapter;
+    private List<WeatherBean.ResultBean> mDatas = new ArrayList<WeatherBean.ResultBean>();
     @Override
     protected int attachLayoutRes() {
         return R.layout.fragment_weather;
@@ -47,6 +55,10 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements V
         //注册监听函数
         initLocation();
         mLocationClient.start();
+        showLoding();
+        initRecycleView();
+        mAdapter = new WeatherAdapter(getActivity(),mDatas);
+        mWeatherList.setAdapter(mAdapter);
     }
 
     @Override
@@ -183,32 +195,35 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements V
         }
     };
 
-
-    @Override
-    public void showLoding() {
-
-    }
-
-    @Override
-    public void hideLoding() {
-
-    }
-
-    @Override
-    public void showErr(String err) {
-
-    }
-
     @Override
     public void showWeather(WeatherBean bean) {
-        Log.i(TAG, "showWeather: "+bean.toString());
+        WeatherBean.ResultBean today = bean.getResult().get(0);
+        mCurLocation.setText(today.getCitynm());
+        mDate.setText(today.getDays() + " " + today.getWeek());
+        mTemperature.setText(today.getTemperature());
+        mWeather.setText(today.getWeather());
+        bean.getResult().remove(0);
+        mDatas.clear();
+        mDatas.addAll(bean.getResult());
+        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
+        hideLoding();
     }
 
-    private void getWeather(BDLocation location){
+    private void getWeather(BDLocation location) {
         String city = "";
         if (location.getCity().contains("市") || location.getCity().contains("省")) {
             city = location.getCity().substring(0, location.getCity().length() - 1);
         }
         mPresenter.requestWeather(city);
     }
+
+    /**
+     * 初始化RecycleView
+     */
+    private void initRecycleView() {
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        mWeatherList.setLayoutManager(linearLayoutManager);
+    }
+
 }

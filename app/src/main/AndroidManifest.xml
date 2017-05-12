@@ -47,9 +47,15 @@
                 </action>
             </intent-filter>
         </service>
+        <!--家里笔记本-->
+       <!-- <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="7V3Cskqgx6kLTdijU0TwCYEN7AZgDQMW" />-->
+        <!--公司台式机-->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="7V3Cskqgx6kLTdijU0TwCYEN7AZgDQMW" />
+            android:value="h0yT2D2R8QpsUUGBgUOBATWy2YFdE9vT" />
+
     </application>
 
 </manifest>

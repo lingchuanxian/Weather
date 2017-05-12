@@ -1,10 +1,8 @@
 package cn.smlcx.weather.mvp.model;
 
 import cn.smlcx.weather.Bean.ChoiceBean;
-import cn.smlcx.weather.Bean.HttpResult;
 import cn.smlcx.weather.Bean.NewsBean;
 import cn.smlcx.weather.Bean.WeatherBean;
-import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -21,7 +19,7 @@ public class ModelContract {
         Observable<NewsBean> getNewsList(String type,String key);
     }
 
-    interface WeatherModel{
-        Observable<WeatherBean> getWeather(String app,String weaid,String appkey,String sign, String format);
+    public interface WeatherModel{
+        Observable<WeatherBean> getWeather(String app,String weaid,String appkey,String sign, String format,Boolean isEvictCache);
     }
 }

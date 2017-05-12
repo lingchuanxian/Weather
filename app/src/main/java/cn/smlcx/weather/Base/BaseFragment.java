@@ -12,9 +12,11 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.smlcx.weather.R;
+import cn.smlcx.weather.widget.EmptyLayout;
 
 import static cn.smlcx.weather.R.id.toolbar;
 
@@ -22,10 +24,12 @@ import static cn.smlcx.weather.R.id.toolbar;
  * Created by lcx on 2017/5/5.
  */
 
-public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
+public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements BaseView{
     @Inject
-    public P mPresenter;
-
+    protected P mPresenter;
+    @Nullable
+    @BindView(R.id.empty_layout)
+    EmptyLayout mEmptyLayout;
     public Toolbar mToolbar;
     public Context mContext;
     public View view;
@@ -65,6 +69,27 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
      * 初始化dagger2
      */
     protected abstract void initInjector();
+
+    @Override
+    public void showLoding() {
+        if (mEmptyLayout != null) {
+            mEmptyLayout.setEmptyStatus(EmptyLayout.STATUS_LOADING);
+        }
+    }
+
+    @Override
+    public void hideLoding() {
+        if (mEmptyLayout != null) {
+            mEmptyLayout.hide();
+        }
+    }
+
+    @Override
+    public void showErr(String err) {
+        if (mEmptyLayout != null) {
+            mEmptyLayout.setEmptyStatus(EmptyLayout.STATUS_NO_NET);
+        }
+    }
 
     @Override
     public void onDestroyView() {

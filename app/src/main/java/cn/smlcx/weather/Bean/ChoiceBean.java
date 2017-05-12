@@ -3,6 +3,8 @@ package cn.smlcx.weather.Bean;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * Created by Administrator on 2017/5/5.
  */
@@ -151,6 +153,10 @@ public class ChoiceBean implements Serializable{
 
             public void setUrl(String url) {
                 this.url = url;
+            }
+
+            @Inject
+            public ListBean() {
             }
         }
     }

@@ -1,5 +1,6 @@
 package cn.smlcx.weather.di.module;
 
+import cn.smlcx.weather.Bean.ChoiceBean;
 import cn.smlcx.weather.di.scope.FragmentScope;
 import cn.smlcx.weather.mvp.model.ChoiceListModel;
 import cn.smlcx.weather.mvp.presenter.ChoiceListPresenter;
@@ -37,5 +38,11 @@ public class ChoiceModule {
     @Provides
     ChoiceListModel provideChoiceListModel(){
         return new ChoiceListModel();
+    }
+
+    @FragmentScope
+    @Provides
+    ChoiceBean.ResultBean.ListBean provideListBean(){
+        return new ChoiceBean.ResultBean.ListBean();
     }
 }
