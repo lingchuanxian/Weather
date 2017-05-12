@@ -1,45 +1,47 @@
 package cn.smlcx.weather.ui.fragment;
 
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.flyco.tablayout.SlidingTabLayout;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import cn.smlcx.weather.Base.BaseAdapter;
 import cn.smlcx.weather.Base.BaseFragment;
-import cn.smlcx.weather.Bean.NewsBean;
 import cn.smlcx.weather.R;
-import cn.smlcx.weather.di.component.DaggerChoiceComponent;
-import cn.smlcx.weather.di.component.DaggerNewsComponent;
-import cn.smlcx.weather.di.module.ChoiceModule;
-import cn.smlcx.weather.di.module.NewsModule;
-import cn.smlcx.weather.mvp.presenter.NewsListPresenter;
-import cn.smlcx.weather.mvp.view.ViewContract;
-import cn.smlcx.weather.ui.adapter.ChoiceAdapter;
-import cn.smlcx.weather.ui.adapter.NewsAdapter;
-import cn.smlcx.weather.widget.EmptyLayout;
-
-import static cn.smlcx.weather.R.id.swipeRefreshLayout;
 
 
-public class NewsFragment extends BaseFragment<NewsListPresenter> implements ViewContract.NewsListView, SwipeRefreshLayout.OnRefreshListener {
+public class NewsFragment extends BaseFragment implements OnTabSelectListener {
     protected final String TAG = this.getClass().getSimpleName();
-    @BindView(R.id.choice_list)
-    RecyclerView mRecycleView;
-    @BindView(swipeRefreshLayout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    private ArrayList<Fragment> mFragments = new ArrayList<>();
+    private final String[] mTitles = {
+            "头条", "社会", "国内"
+            , "国际", "娱乐", "体育", "军事", "科技", "财经", "时尚"
+    };
+    private final String[] mType = {
+            "toutiao", "shehui", "guonei"
+            , "guoji", "yule", "tiyu", "junshi", "keji", "caijing", "shishang"
+    };
+
+    private NewsPagerAdapter mAdapter;
+    @BindView(R.id.tl_4)
+    SlidingTabLayout mTl4;
     Unbinder unbinder;
-    @BindView(R.id.empty_layout)
-    EmptyLayout mEmptyLayout;
-    Unbinder unbinder1;
-    private BaseAdapter mAdapter;
-    private List<NewsBean.ResultBean.DataBean> mData = new ArrayList<>();
-    private int pageIndex = 1;
-    boolean isLoading;
+    @BindView(R.id.viewPage)
+    ViewPager mViewPage;
+
     @Override
     protected int attachLayoutRes() {
         return R.layout.fragment_news;
@@ -48,68 +50,59 @@ public class NewsFragment extends BaseFragment<NewsListPresenter> implements Vie
     @Override
     protected void initViews() {
         mToolbar.setTitle("新闻头条");
-        initRecycleView();
-        mAdapter = new NewsAdapter(getActivity(), mData);
-        mRecycleView.setAdapter(mAdapter);
+
+        for (String type : mType) {
+            Log.i(TAG, "initViews: "+type);
+            mFragments.add(CommonNewsFragment.getInstance(type));
+        }
+        mAdapter = new NewsPagerAdapter(getActivity().getSupportFragmentManager());
+        mViewPage.setAdapter(mAdapter);
+        mViewPage.setOffscreenPageLimit(10);
+
+        mTl4.setViewPager(mViewPage);
+
     }
 
-    private void initRecycleView() {
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        mRecycleView.setLayoutManager(linearLayoutManager);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
-                if (lastVisibleItemPosition + 1 == mAdapter.getItemCount()) {
-                        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
-                    }
-            }
-        });
-    }
 
     @Override
     protected void initData() {
-        mPresenter.requestNewsList(1);
+
     }
+
     @Override
     protected void initInjector() {
-        DaggerNewsComponent
-                .builder()
-                .newsModule(new NewsModule(this))
-                .build()
-                .inject(this);
+
+    }
+
+
+    @Override
+    public void onTabSelect(int position) {
+
     }
 
     @Override
-    public void onRefresh() {
-        pageIndex = 1;
-        mPresenter.requestNewsList(pageIndex);
-    }
-
-    @Override
-    public void showLoding() {
-        mEmptyLayout.setEmptyStatus(EmptyLayout.STATUS_LOADING);
-    }
-
-    @Override
-    public void hideLoding() {
-        mEmptyLayout.hide();
-    }
-
-    @Override
-    public void showErr(String err) {
+    public void onTabReselect(int position) {
 
     }
-    @Override
-    public void showNewsList(List<NewsBean.ResultBean.DataBean> mList) {
-        if (pageIndex == 1) {
-            mData.clear();
+
+    private class NewsPagerAdapter extends FragmentPagerAdapter {
+        public NewsPagerAdapter(FragmentManager fm) {
+            super(fm);
         }
-        mAdapter.addAll(mList);
-        mSwipeRefreshLayout.setRefreshing(false);
-        isLoading = false;
-        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
+
+        @Override
+        public int getCount() {
+            return mFragments.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mTitles[position];
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragments.get(position);
+        }
     }
 }

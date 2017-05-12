@@ -38,8 +38,6 @@ public class MainActivity extends BaseActivity<ChoiceListPresenter> {
         mViewPager.setAdapter(new ViewPageAdapter(getSupportFragmentManager()));
         mAlphaIndicator.setViewPager(mViewPager);
         mViewPager.setOffscreenPageLimit(3);
-        mAlphaIndicator.setTabCurrenItem(1);
-        mChoices.showNumber(12);
     }
 
     @Override

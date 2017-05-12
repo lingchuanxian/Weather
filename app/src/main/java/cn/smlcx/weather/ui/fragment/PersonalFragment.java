@@ -1,40 +1,33 @@
 package cn.smlcx.weather.ui.fragment;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.flyco.tablayout.SlidingTabLayout;
-import com.flyco.tablayout.listener.OnTabSelectListener;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.smlcx.weather.Base.BaseAdapter;
 import cn.smlcx.weather.Base.BaseFragment;
+import cn.smlcx.weather.Bean.NewsBean;
 import cn.smlcx.weather.R;
+import cn.smlcx.weather.di.component.DaggerChoiceComponent;
+import cn.smlcx.weather.di.component.DaggerNewsComponent;
+import cn.smlcx.weather.di.module.ChoiceModule;
+import cn.smlcx.weather.di.module.NewsModule;
+import cn.smlcx.weather.mvp.presenter.NewsListPresenter;
+import cn.smlcx.weather.mvp.view.ViewContract;
+import cn.smlcx.weather.ui.adapter.ChoiceAdapter;
+import cn.smlcx.weather.ui.adapter.NewsAdapter;
+import cn.smlcx.weather.widget.EmptyLayout;
+
+import static cn.smlcx.weather.R.id.swipeRefreshLayout;
 
 
-public class PersonalFragment extends BaseFragment implements OnTabSelectListener {
-    private ArrayList<Fragment> mFragments = new ArrayList<>();
-    private final String[] mTitles = {
-            "头条", "社会", "国内"
-            , "国际", "娱乐", "体育", "军事","科技","财经","时尚"
-    };
-
-    private MyPagerAdapter mAdapter;
-    @BindView(R.id.tl_4)
-    SlidingTabLayout mTl4;
-    Unbinder unbinder;
-    @BindView(R.id.viewPage)
-    ViewPager mViewPage;
-
+public class PersonalFragment extends BaseFragment<NewsListPresenter> implements ViewContract.NewsListView, SwipeRefreshLayout.OnRefreshListener {
+    protected final String TAG = this.getClass().getSimpleName();
     @Override
     protected int attachLayoutRes() {
         return R.layout.fragment_personal;
@@ -43,72 +36,33 @@ public class PersonalFragment extends BaseFragment implements OnTabSelectListene
     @Override
     protected void initViews() {
         mToolbar.setTitle("个人中心");
-
-        for (String title : mTitles) {
-            mFragments.add(SimpleCardFragment.getInstance(title));
-        }
-        mAdapter = new MyPagerAdapter(getActivity().getSupportFragmentManager());
-        mViewPage.setAdapter(mAdapter);
-
-
-        mTl4.setViewPager(mViewPage);
-
     }
 
 
     @Override
     protected void initData() {
-
     }
-
     @Override
     protected void initInjector() {
-
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
+    public void onRefresh() {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+    public void showLoding() {
     }
 
     @Override
-    public void onTabSelect(int position) {
-
+    public void hideLoding() {
     }
 
     @Override
-    public void onTabReselect(int position) {
+    public void showErr(String err) {
 
     }
-
-
-    private class MyPagerAdapter extends FragmentPagerAdapter {
-        public MyPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mTitles[position];
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
+    @Override
+    public void showNewsList(List<NewsBean.ResultBean.DataBean> mList) {
     }
 }

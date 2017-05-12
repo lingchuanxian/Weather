@@ -9,18 +9,29 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.Poi;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.Unbinder;
 import cn.smlcx.weather.Base.BaseFragment;
+import cn.smlcx.weather.Bean.ChoiceBean;
+import cn.smlcx.weather.Bean.WeatherBean;
 import cn.smlcx.weather.R;
+import cn.smlcx.weather.di.component.DaggerChoiceComponent;
+import cn.smlcx.weather.di.component.DaggerWeatherComponent;
+import cn.smlcx.weather.di.module.ChoiceModule;
+import cn.smlcx.weather.di.module.WeatherModule;
+import cn.smlcx.weather.mvp.model.WeatherModel;
+import cn.smlcx.weather.mvp.presenter.WeatherPresenter;
+import cn.smlcx.weather.mvp.view.ViewContract;
 
 
-public class WeatherFragment extends BaseFragment {
+public class WeatherFragment extends BaseFragment<WeatherPresenter> implements ViewContract.WeatherView{
     protected final String TAG = this.getClass().getSimpleName();
     public LocationClient mLocationClient = null;
-    @BindView(R.id.cur_location)
-    TextView mCurLocation;
     Unbinder unbinder;
+    private WeatherBean mData = new WeatherBean();
 
     @Override
     protected int attachLayoutRes() {
@@ -45,7 +56,11 @@ public class WeatherFragment extends BaseFragment {
 
     @Override
     protected void initInjector() {
-
+        DaggerWeatherComponent
+                .builder()
+                .weatherModule(new WeatherModule(this))
+                .build()
+                .inject(this);
     }
 
     private void initLocation() {
@@ -54,7 +69,7 @@ public class WeatherFragment extends BaseFragment {
         //可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         option.setCoorType("bd09ll");
         //可选，默认gcj02，设置返回的定位结果坐标系
-        int span = 1000;
+        int span = 0;
         option.setScanSpan(span);
         //可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
         option.setIsNeedAddress(true);
@@ -160,7 +175,7 @@ public class WeatherFragment extends BaseFragment {
                 }
             }
             Log.e(TAG, "onReceiveLocation: " + sb.toString());
-            setResult(location);
+            getWeather(location);
             mLocationClient.stop();
         }
 
@@ -169,8 +184,31 @@ public class WeatherFragment extends BaseFragment {
     };
 
 
-    public void setResult(BDLocation location) {
-        mCurLocation.setText("当前位置:"+location.getCity());
+    @Override
+    public void showLoding() {
+
     }
 
+    @Override
+    public void hideLoding() {
+
+    }
+
+    @Override
+    public void showErr(String err) {
+
+    }
+
+    @Override
+    public void showWeather(WeatherBean bean) {
+        Log.i(TAG, "showWeather: "+bean.toString());
+    }
+
+    private void getWeather(BDLocation location){
+        String city = "";
+        if (location.getCity().contains("市") || location.getCity().contains("省")) {
+            city = location.getCity().substring(0, location.getCity().length() - 1);
+        }
+        mPresenter.requestWeather(city);
+    }
 }
