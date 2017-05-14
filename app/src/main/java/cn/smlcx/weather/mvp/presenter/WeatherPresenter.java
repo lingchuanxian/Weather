@@ -4,9 +4,11 @@ import javax.inject.Inject;
 
 import cn.smlcx.weather.Base.BasePresenter;
 import cn.smlcx.weather.Bean.WeatherBean;
+import cn.smlcx.weather.api.ApiService;
+import cn.smlcx.weather.api.RetrofitWrapper2;
 import cn.smlcx.weather.di.scope.ActivityScope;
 import cn.smlcx.weather.mvp.model.ModelContract;
-import cn.smlcx.weather.mvp.model.WeatherModel;
+import cn.smlcx.weather.mvp.model.WeatherModels;
 import cn.smlcx.weather.mvp.view.ViewContract;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -17,16 +19,16 @@ import rx.schedulers.Schedulers;
  * Created by Administrator on 2017/5/10.
  */
 @ActivityScope
-public class WeatherPresenter extends BasePresenter<WeatherModel,ViewContract.WeatherView> {
+public class WeatherPresenter extends BasePresenter<WeatherModels,ViewContract.WeatherView> {
     private boolean isFirst = true;
     @Inject
-    public WeatherPresenter(ModelContract.WeatherModel model, ViewContract.WeatherView rootView) {
-        super( rootView);
+    public WeatherPresenter(ViewContract.WeatherView rootView) {
+        super(rootView);
     }
 
     public void requestWeather(final String weaid){
-        mModel.getWeather("weather.future",weaid,"25328","f1ee45ba1618e8076d0f011315370e84","json",false)
-        //RetrofitWrapper2.getInstance().create(ApiService.class).getWeather("weather.future",weaid,"25328","f1ee45ba1618e8076d0f011315370e84","json")
+       // mModel.getWeather("weather.future",weaid,"25328","f1ee45ba1618e8076d0f011315370e84","json",false)
+        RetrofitWrapper2.getInstance().create(ApiService.class).getWeather("weather.future",weaid,"25328","f1ee45ba1618e8076d0f011315370e84","json")
                 .subscribeOn(Schedulers.newThread())//请求在新的线程中执行
                 .observeOn(Schedulers.io())         //请求完成后在io线程中执行
                 .doOnSubscribe(new Action0() {

@@ -13,7 +13,7 @@ import rx.Observable;
  * Created by lcx on 2017/5/8.
  */
 @ActivityScope
-public class ChoiceListModel extends BaseModel implements ModelContract.ChoiceListModel{
+public class ChoiceListModel implements ModelContract.ChoiceListModel{
     @Inject
     public ChoiceListModel() {
     }

@@ -1,7 +1,7 @@
 package cn.smlcx.weather.di.module;
 
 import cn.smlcx.weather.di.scope.FragmentScope;
-import cn.smlcx.weather.mvp.model.WeatherModel;
+import cn.smlcx.weather.mvp.model.WeatherModels;
 import cn.smlcx.weather.mvp.presenter.WeatherPresenter;
 import cn.smlcx.weather.mvp.view.ViewContract;
 import dagger.Module;
@@ -30,12 +30,12 @@ public class WeatherModule {
 
     @FragmentScope
     @Provides
-    WeatherPresenter provideWeatherPresenter(WeatherModel model){
-        return new WeatherPresenter(model,this.view);
+    WeatherPresenter provideWeatherPresenter(){
+        return new WeatherPresenter(this.view);
     }
     @FragmentScope
     @Provides
-    WeatherModel provideWeatherModel(WeatherModel weatherModel){
+    WeatherModels provideWeatherModel(WeatherModels weatherModel){
         return weatherModel;
     }
 }

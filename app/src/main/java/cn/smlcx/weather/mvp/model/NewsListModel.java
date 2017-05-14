@@ -10,7 +10,7 @@ import rx.Observable;
  * Created by Administrator on 2017/5/10.
  */
 
-public class NewsListModel extends BaseModel implements ModelContract.NewsListModel{
+public class NewsListModel implements ModelContract.NewsListModel{
     @Override
     public Observable<NewsBean> getNewsList(String type,String key) {
         return RetrofitWrapper.getInstance().create(ApiService.class).getNewsList(type,key);
