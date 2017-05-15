@@ -1,6 +1,5 @@
 package cn.smlcx.weather.ui.activity;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +23,7 @@ import cn.smlcx.weather.utils.ToastUtil;
  */
 
 public class LoginActivity extends BaseActivity {
+    protected final String TAG = this.getClass().getSimpleName();
     @BindView(R.id.userName)
     EditText mUserName;
     @BindView(R.id.passWord)
@@ -80,16 +80,23 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void initViews() {
 
-       /* pd = new ProgressDialog(this);
-        pd.setContentView(R.layout.progressbar);
-        pd.setCancelable(false);
-        pd.getWindow().setBackgroundDrawableResource(R.color.color_white);
-        pd.show();*/
     }
 
     @Override
     protected void initData() {
-
+      /* new RxPermissions(this)
+               .request(Manifest.permission.ACCESS_FINE_LOCATION)
+               .subscribe(new Action1<Boolean>() {
+                   @Override
+                   public void call(Boolean granted) {
+                       if (granted) { // 在android 6.0之前会默认返回true
+                           Toast.makeText(LoginActivity.this, "已获取权限", Toast.LENGTH_SHORT).show();
+                       } else {
+                           // 未获取权限
+                           Toast.makeText(LoginActivity.this, "您没有授权该权限，请在设置中打开授权", Toast.LENGTH_SHORT).show();
+                       }
+                   }
+               });*/
     }
 
     @Override

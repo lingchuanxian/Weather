@@ -1,5 +1,7 @@
 package cn.smlcx.weather.ui.fragment;
 
+import android.Manifest;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,6 +25,9 @@ import cn.smlcx.weather.di.module.WeatherModule;
 import cn.smlcx.weather.mvp.presenter.WeatherPresenter;
 import cn.smlcx.weather.mvp.view.ViewContract;
 import cn.smlcx.weather.ui.adapter.WeatherAdapter;
+import cn.smlcx.weather.utils.ToastUtil;
+import cn.smlcx.weather.utils.permission.PermissionListener;
+import cn.smlcx.weather.utils.permission.PermissionsUtil;
 
 
 public class WeatherFragment extends BaseFragment<WeatherPresenter> implements ViewContract.WeatherView {
@@ -41,6 +46,10 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements V
     private WeatherBean mData = new WeatherBean();
     private WeatherAdapter mAdapter;
     private List<WeatherBean.ResultBean> mDatas = new ArrayList<WeatherBean.ResultBean>();
+    private AlertDialog.Builder dialog;
+    private String[] permiss=new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION};
+    private boolean isRequest=true;
     @Override
     protected int attachLayoutRes() {
         return R.layout.fragment_weather;
@@ -54,6 +63,7 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements V
         mLocationClient.registerLocationListener(mListener);
         //注册监听函数
         initLocation();
+
         mLocationClient.start();
         showLoding();
         initRecycleView();
@@ -61,9 +71,48 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements V
         mWeatherList.setAdapter(mAdapter);
     }
 
+    /**
+     * 这是兼容的 AlertDialog
+     */
+    private void initDialog() {
+      /*
+      这里使用了 android.support.v7.app.AlertDialog.Builder
+      可以直接在头部写 import android.support.v7.app.AlertDialog
+      那么下面就可以写成 AlertDialog.Builder
+      */
+        dialog = new AlertDialog.Builder(getActivity());
+        dialog.setTitle("温馨提示");
+        dialog.setMessage("当前页面需要定位服务，请您开启定位权限");
+        dialog.setNegativeButton("取消", null);
+        dialog.setPositiveButton("确定", null);
+    }
+
     @Override
     protected void initData() {
-
+        initDialog();
+        if (PermissionsUtil.hasPermission(getActivity(), permiss)) {
+            ToastUtil.show(getActivity(),"已获取权限");
+        } else {
+            PermissionsUtil.DialogInfo info = new PermissionsUtil.DialogInfo();
+            info.title = "友情提示";
+            info.Content = "为了更好的为您提供服务,我们需要您对查看通讯录进行授权。\n \n 请点击 \"设置\"-\"权限\"-打开所需权限。";
+            info.cancel = "取消";
+            info.ensure = "设置";
+            if (isRequest) {
+                isRequest=false;
+                PermissionsUtil.requestPermission(getActivity(), new PermissionListener() {
+                    @Override
+                    public void permissionGranted() {
+                        ToastUtil.show(getActivity(),"授权成功");
+                    }
+                    @Override
+                    public void permissionDenied(String[] permission) {
+                        ToastUtil.show(getActivity(),"授权失败");
+                        permiss = null;
+                    }
+                }, permiss, true, info);
+            }
+        }
     }
 
     @Override
