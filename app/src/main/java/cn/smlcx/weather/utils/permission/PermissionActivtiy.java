@@ -9,6 +9,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
+import cn.smlcx.weather.app.App;
+
 public class PermissionActivtiy extends AppCompatActivity {
     private static final String PERMSSION = "permssion";
     private static final String SHOW_DIALOG = "showdialog";
@@ -23,6 +25,7 @@ public class PermissionActivtiy extends AppCompatActivity {
     private boolean isRequireCheck;//是否已经请求过权限
     private boolean isShowDialog;//是否显示自定义dialog
     private String[] permission;//申请的权限组
+    private App app;
     private PermissionsUtil.DialogInfo info;//自定义dialog显示内容
 
     public static void startActivtiy(@NonNull Activity activity,
@@ -58,7 +61,7 @@ public class PermissionActivtiy extends AppCompatActivity {
             info.cancel = defaultCancel;
             info.ensure = defaultEnsure;
         }
-
+        app = (App) getApplication();
     }
 
     @Override
@@ -148,6 +151,7 @@ public class PermissionActivtiy extends AppCompatActivity {
             listener.permissionDenied(permission);
         }
         finish();
+        app.finishActivity();
     }
 
     @Override

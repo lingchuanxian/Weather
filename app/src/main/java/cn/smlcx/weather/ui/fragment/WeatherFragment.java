@@ -1,6 +1,8 @@
 package cn.smlcx.weather.ui.fragment;
 
 import android.Manifest;
+import android.content.DialogInterface;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,10 +28,14 @@ import cn.smlcx.weather.mvp.presenter.WeatherPresenter;
 import cn.smlcx.weather.mvp.view.ViewContract;
 import cn.smlcx.weather.ui.adapter.WeatherAdapter;
 import cn.smlcx.weather.utils.ToastUtil;
-import cn.smlcx.weather.utils.permission.PermissionListener;
-import cn.smlcx.weather.utils.permission.PermissionsUtil;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 
-
+@RuntimePermissions
 public class WeatherFragment extends BaseFragment<WeatherPresenter> implements ViewContract.WeatherView {
     protected final String TAG = this.getClass().getSimpleName();
     public LocationClient mLocationClient = null;
@@ -58,44 +64,14 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements V
     @Override
     protected void initViews() {
         mToolbar.setTitle("最新天气");
-        mLocationClient = new LocationClient(getActivity());
-        //声明LocationClient类
-        mLocationClient.registerLocationListener(mListener);
-        //注册监听函数
-        initLocation();
-
-        mLocationClient.start();
-        showLoding();
-        initRecycleView();
-        mAdapter = new WeatherAdapter(getActivity(),mDatas);
-        mWeatherList.setAdapter(mAdapter);
-    }
-
-    /**
-     * 这是兼容的 AlertDialog
-     */
-    private void initDialog() {
-      /*
-      这里使用了 android.support.v7.app.AlertDialog.Builder
-      可以直接在头部写 import android.support.v7.app.AlertDialog
-      那么下面就可以写成 AlertDialog.Builder
-      */
-        dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle("温馨提示");
-        dialog.setMessage("当前页面需要定位服务，请您开启定位权限");
-        dialog.setNegativeButton("取消", null);
-        dialog.setPositiveButton("确定", null);
-    }
-
-    @Override
-    protected void initData() {
-        initDialog();
+        WeatherFragmentPermissionsDispatcher.needPermissionWithCheck(this);
+/*
         if (PermissionsUtil.hasPermission(getActivity(), permiss)) {
             ToastUtil.show(getActivity(),"已获取权限");
         } else {
             PermissionsUtil.DialogInfo info = new PermissionsUtil.DialogInfo();
             info.title = "友情提示";
-            info.Content = "为了更好的为您提供服务,我们需要您对查看通讯录进行授权。\n \n 请点击 \"设置\"-\"权限\"-打开所需权限。";
+            info.Content = "为了更好的为您提供服务,我们需要您对进行授权。\n \n 请点击 \"设置\"-\"权限\"-打开所需权限。";
             info.cancel = "取消";
             info.ensure = "设置";
             if (isRequest) {
@@ -103,7 +79,8 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements V
                 PermissionsUtil.requestPermission(getActivity(), new PermissionListener() {
                     @Override
                     public void permissionGranted() {
-                        ToastUtil.show(getActivity(),"授权成功");
+                        mLocationClient.start();
+                        showLoding();
                     }
                     @Override
                     public void permissionDenied(String[] permission) {
@@ -112,7 +89,19 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements V
                     }
                 }, permiss, true, info);
             }
-        }
+        }*/
+
+    }
+
+    /**
+     * 这是兼容的 AlertDialog
+     */
+    private void initDialog() {
+    }
+
+    @Override
+    protected void initData() {
+        initDialog();
     }
 
     @Override
@@ -275,4 +264,70 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements V
         mWeatherList.setLayoutManager(linearLayoutManager);
     }
 
+    @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
+    void needPermission() {
+        mLocationClient = new LocationClient(getActivity());
+        //声明LocationClient类
+        mLocationClient.registerLocationListener(mListener);
+        //注册监听函数
+        initLocation();
+        initRecycleView();
+        mAdapter = new WeatherAdapter(getActivity(),mDatas);
+        mWeatherList.setAdapter(mAdapter);
+        mLocationClient.start();
+        showLoding();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        WeatherFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    @OnShowRationale({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
+    void showRationale(final PermissionRequest request) {
+        new AlertDialog.Builder(getActivity())
+                .setPositiveButton("好的", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                       /* request.proceed();*/
+                    }
+                })
+                .setNegativeButton("不给", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        request.cancel();
+                    }
+                })
+                .setCancelable(false)
+                .setMessage("获取天气信息需要获取定位权限，应用将要申请定位权限")
+                .show();
+
+    }
+
+    @OnPermissionDenied({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
+    void permissionDenied() {
+        ToastUtil.show(getActivity(),"拒绝了权限的申请");
+        Log.e(TAG, "permissionDenied: 拒绝了权限的申请" );
+    }
+
+    @OnNeverAskAgain({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
+    void askAgain() {
+        new AlertDialog.Builder(getActivity())
+                .setPositiveButton("好的", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setCancelable(false)
+                .setMessage("您已经禁止了定位权限,是否现在去开启")
+                .show();
+    }
 }
