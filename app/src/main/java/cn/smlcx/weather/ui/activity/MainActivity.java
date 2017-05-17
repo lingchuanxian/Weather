@@ -19,8 +19,8 @@ public class MainActivity extends BaseActivity<ChoiceListPresenter> {
     ViewPager mViewPager;
     @BindView(R.id.alphaIndicator)
     AlphaTabsIndicator mAlphaIndicator;
-    @BindView(R.id.weather)
-    AlphaTabView mWeather;
+   /* @BindView(R.id.weather)
+    AlphaTabView mWeather;*/
     @BindView(R.id.choices)
     AlphaTabView mChoices;
     @BindView(R.id.news)
@@ -37,7 +37,7 @@ public class MainActivity extends BaseActivity<ChoiceListPresenter> {
     protected void initViews() {
         mViewPager.setAdapter(new ViewPageAdapter(getSupportFragmentManager()));
         mAlphaIndicator.setViewPager(mViewPager);
-        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setOffscreenPageLimit(5);
     }
 
     @Override

@@ -65,32 +65,6 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements V
     protected void initViews() {
         mToolbar.setTitle("最新天气");
         WeatherFragmentPermissionsDispatcher.needPermissionWithCheck(this);
-/*
-        if (PermissionsUtil.hasPermission(getActivity(), permiss)) {
-            ToastUtil.show(getActivity(),"已获取权限");
-        } else {
-            PermissionsUtil.DialogInfo info = new PermissionsUtil.DialogInfo();
-            info.title = "友情提示";
-            info.Content = "为了更好的为您提供服务,我们需要您对进行授权。\n \n 请点击 \"设置\"-\"权限\"-打开所需权限。";
-            info.cancel = "取消";
-            info.ensure = "设置";
-            if (isRequest) {
-                isRequest=false;
-                PermissionsUtil.requestPermission(getActivity(), new PermissionListener() {
-                    @Override
-                    public void permissionGranted() {
-                        mLocationClient.start();
-                        showLoding();
-                    }
-                    @Override
-                    public void permissionDenied(String[] permission) {
-                        ToastUtil.show(getActivity(),"授权失败");
-                        permiss = null;
-                    }
-                }, permiss, true, info);
-            }
-        }*/
-
     }
 
     /**
@@ -290,10 +264,10 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements V
                 .setPositiveButton("好的", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                       /* request.proceed();*/
+                        request.proceed();
                     }
                 })
-                .setNegativeButton("不给", new DialogInterface.OnClickListener() {
+                .setNegativeButton("拒绝", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         request.cancel();
@@ -307,8 +281,8 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements V
 
     @OnPermissionDenied({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     void permissionDenied() {
-        ToastUtil.show(getActivity(),"拒绝了权限的申请");
-        Log.e(TAG, "permissionDenied: 拒绝了权限的申请" );
+        ToastUtil.show(getActivity(),"拒绝了权限的申请,程序即将退出");
+        mApp.finishActivity();
     }
 
     @OnNeverAskAgain({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
@@ -320,14 +294,35 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements V
                         dialog.cancel();
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
                 .setCancelable(false)
-                .setMessage("您已经禁止了定位权限,是否现在去开启")
+                .setTitle("温馨提示")
+                .setMessage("您已经禁止了定位权限,\n请到设置->应用->Weather->权限打开定位权限")
                 .show();
     }
+
+    /**
+     * 获取应用详情页面intent
+     *
+     * @return
+     */
+   /* private Intent getAppDetailSettingIntent() {
+        Intent localIntent = new Intent();
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Build.VERSION.SDK_INT >= 9) {
+            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            localIntent.setData(Uri.fromParts("package", getActivity().getPackageName(), null));
+        } else if (Build.VERSION.SDK_INT <= 8) {
+            localIntent.setAction(Intent.ACTION_VIEW);
+            localIntent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
+            localIntent.putExtra("com.android.settings.ApplicationPkgName", getActivity().getPackageName());
+        }
+        return localIntent;
+    }*/
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
+    }
+
 }

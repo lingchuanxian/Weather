@@ -26,6 +26,32 @@
         android:orientation="horizontal">
 
         <com.yinglan.alphatabs.AlphaTabView
+            android:id="@+id/msg"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="5dp"
+            app:tabIconNormal="@mipmap/home_normal"
+            app:tabIconSelected="@mipmap/home_selected"
+            app:tabText="消息"
+            app:tabTextSize="12sp"
+            app:textColorNormal="#999999"
+            app:textColorSelected="#46c01b"/>
+
+        <com.yinglan.alphatabs.AlphaTabView
+            android:id="@+id/contacts"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="5dp"
+            app:tabIconNormal="@mipmap/contact_normal"
+            app:tabIconSelected="@mipmap/contact_selected"
+            app:tabText="好友"
+            app:tabTextSize="12sp"
+            app:textColorNormal="#999999"
+            app:textColorSelected="#46c01b"/>
+
+        <!--<com.yinglan.alphatabs.AlphaTabView
             android:id="@+id/weather"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -36,7 +62,7 @@
             app:tabText="天气"
             app:tabTextSize="12sp"
             app:textColorNormal="#999999"
-            app:textColorSelected="#46c01b"/>
+            app:textColorSelected="#46c01b"/>-->
 
         <com.yinglan.alphatabs.AlphaTabView
             android:id="@+id/choices"

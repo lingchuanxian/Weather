@@ -34,7 +34,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     public Context mContext;
     public View view;
     private Unbinder unbinder;
-    @Nullable
+    public cn.smlcx.weather.app.App mApp;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(attachLayoutRes(), container, false);
@@ -52,6 +52,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.mipmap.ic_drawer_home);
+        mApp = (cn.smlcx.weather.app.App) getActivity().getApplication();
     }
 
     protected abstract int attachLayoutRes();
