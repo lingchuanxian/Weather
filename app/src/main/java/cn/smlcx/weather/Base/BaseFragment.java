@@ -46,8 +46,8 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         return view;
     }
 
-
     private void init() {
+        mContext = getActivity();
         mToolbar = (Toolbar) view.findViewById(toolbar);
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);

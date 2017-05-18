@@ -1,5 +1,6 @@
 package cn.smlcx.weather.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -27,12 +29,15 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.smlcx.weather.Base.BaseFragment;
 import cn.smlcx.weather.Bean.AnyEventType;
-import cn.smlcx.weather.Bean.ChatPrevire;
+import cn.smlcx.weather.Bean.ChatPreview;
 import cn.smlcx.weather.Bean.NewsBean;
 import cn.smlcx.weather.R;
 import cn.smlcx.weather.mvp.presenter.NewsListPresenter;
 import cn.smlcx.weather.mvp.view.ViewContract;
+import cn.smlcx.weather.ui.activity.ChatActivity;
 import cn.smlcx.weather.ui.adapter.ChatAdapter;
+import cn.smlcx.weather.utils.ToActivityUtil;
+import cn.smlcx.weather.utils.ToastUtil;
 
 
 public class MsgFragment extends BaseFragment<NewsListPresenter> implements ViewContract.NewsListView, SwipeRefreshLayout.OnRefreshListener {
@@ -42,7 +47,7 @@ public class MsgFragment extends BaseFragment<NewsListPresenter> implements View
     Unbinder unbinder;
     private int unReadsum = 0;
     private ChatAdapter mAdapter;
-    private List<ChatPrevire> mData = new ArrayList<ChatPrevire>();
+    private List<ChatPreview> mData = new ArrayList<ChatPreview>();
 
     @Override
     protected int attachLayoutRes() {
@@ -53,8 +58,17 @@ public class MsgFragment extends BaseFragment<NewsListPresenter> implements View
     protected void initViews() {
         mToolbar.setTitle("消息");
         initRecycleView();
-        mAdapter = new ChatAdapter(R.layout.msg_item, mData);
+        mAdapter = new ChatAdapter(R.layout.msg_item, mData,mContext);
         mMsgList.setAdapter(mAdapter);
+
+        mAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int i) {
+                Intent intent = new Intent(mContext,ChatActivity.class);
+                intent.putExtra("userName",mData.get(i).getUsername());
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -97,14 +111,11 @@ public class MsgFragment extends BaseFragment<NewsListPresenter> implements View
 
         for (Map.Entry<String, EMConversation> map : conversations.entrySet()) {
             unReadsum += map.getValue().getUnreadMsgCount();
-            ChatPrevire cp = new ChatPrevire();
+            ChatPreview cp = new ChatPreview();
             cp.setUsername(map.getKey());
-            cp.setLastMsg(map.getValue().getLastMessage().getBody().toString());
-            cp.setDate(map.getValue().getLastMessage().getMsgTime());
+           cp.setEmConversation(map.getValue());
             mData.add(cp);
         }
-        ChatPrevire cp = new ChatPrevire("smlcx",1495097127,"hello，在吗",12);
-        mData.add(cp);
         mAdapter.notifyDataSetChanged();
         EventBus.getDefault().post(new AnyEventType("" + unReadsum));
 
