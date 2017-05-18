@@ -7,16 +7,20 @@ import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 
 import cn.smlcx.weather.R;
+import cn.smlcx.weather.utils.SPUtils;
 import cn.smlcx.weather.utils.ToActivityUtil;
+
 
 /**
  * Created by lcx on 2017/5/17.
  */
 
 public class SplashActivity extends AppIntro {
+    private Boolean isFirstIn;
     @Override
     public void init(Bundle savedInstanceState) {
 
+        isFirstIn = SPUtils.getValue(this,"share","isFirstIn",true);
         // Add your slide's fragments here.
         // AppIntro will automatically generate the dots indcator and buttons.
         addSlide(AppIntroFragment.newInstance("测试标题", "测试描述", R.mipmap.into_1, Color.parseColor("#2196F3")));
@@ -26,14 +30,15 @@ public class SplashActivity extends AppIntro {
         setBarColor(Color.parseColor("#3F51B5"));
         setSeparatorColor(Color.parseColor("#2196F3"));        // Hide Skip/Done button.
         showSkipButton(false);
+        setDoneText("立即进入");
         setProgressButtonEnabled(true);        // Turn vibration on and set intensity.
         // NOTE: you will probably need to ask VIBRATE permisssion in Manifest.
         setVibrate(true);
         setVibrateIntensity(30);
-        setFadeAnimation();
+        //setFadeAnimation();
         //setZoomAnimation();
         setFlowAnimation();
-       //setSlideOverAnimation();
+        //setSlideOverAnimation();
         //setDepthAnimation();
     }
 
@@ -44,6 +49,7 @@ public class SplashActivity extends AppIntro {
 
     @Override
     public void onDonePressed() {
+        SPUtils.putValue(this,"share","isFirstIn",false);
         ToActivityUtil.toNextActivity(this,LoginActivity.class);
         finish();
     }

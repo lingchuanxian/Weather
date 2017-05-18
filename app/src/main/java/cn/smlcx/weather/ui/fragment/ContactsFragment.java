@@ -1,6 +1,10 @@
 package cn.smlcx.weather.ui.fragment;
 
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
+
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.List;
 
@@ -20,12 +24,21 @@ public class ContactsFragment extends BaseFragment<NewsListPresenter> implements
 
     @Override
     protected void initViews() {
-        mToolbar.setTitle("消息");
+        mToolbar.setTitle("通讯录");
     }
-
 
     @Override
     protected void initData() {
+        List<String> usernames = null;
+        try {
+            usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
+            for (int i = 0; i < usernames.size(); i++) {
+                Log.e(TAG, "initData: "+usernames );
+            }
+        } catch (HyphenateException e) {
+            e.printStackTrace();
+            Log.e(TAG, "initData: "+e.getMessage() );
+        }
     }
     @Override
     protected void initInjector() {

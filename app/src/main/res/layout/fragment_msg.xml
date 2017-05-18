@@ -13,12 +13,14 @@
              tools:layout_editor_absoluteY="0dp"
              tools:layout_editor_absoluteX="8dp"/>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@mipmap/into_1"/>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/msg_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/msg_item"
+            />
 
 </LinearLayout>
 
