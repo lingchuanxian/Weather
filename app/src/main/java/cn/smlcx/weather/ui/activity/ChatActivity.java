@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 
 import butterknife.BindView;
@@ -35,6 +36,8 @@ public class ChatActivity extends BaseActivity {
     @Override
     protected void initViews() {
         userName = getIntent().getExtras().get("userName").toString();
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(userName);
+        conversation.markAllMessagesAsRead();
         mToolbar.setTitle(userName);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

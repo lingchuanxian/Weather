@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +35,6 @@ import cn.smlcx.weather.mvp.presenter.NewsListPresenter;
 import cn.smlcx.weather.mvp.view.ViewContract;
 import cn.smlcx.weather.ui.activity.ChatActivity;
 import cn.smlcx.weather.ui.adapter.ChatAdapter;
-import cn.smlcx.weather.utils.ToActivityUtil;
-import cn.smlcx.weather.utils.ToastUtil;
 
 
 public class MsgFragment extends BaseFragment<NewsListPresenter> implements ViewContract.NewsListView, SwipeRefreshLayout.OnRefreshListener {
@@ -74,14 +71,34 @@ public class MsgFragment extends BaseFragment<NewsListPresenter> implements View
 
     @Override
     protected void initData() {
+        Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
+        for (Map.Entry<String, EMConversation> map : conversations.entrySet()) {
+            unReadsum += map.getValue().getUnreadMsgCount();
+            ChatPreview cp = new ChatPreview();
+            cp.setUsername(map.getKey());
+            cp.setEmConversation(map.getValue());
+            mData.add(cp);
+        }
+        mAdapter.notifyDataSetChanged();
+        EventBus.getDefault().post(new AnyEventType("" + unReadsum));
         EMMessageListener msgListener = new EMMessageListener() {
             @Override
-            public void onMessageReceived(List<EMMessage> messages) {
-                Log.i(TAG, "onMessageReceived: " + messages.get(0).getBody());
-                Log.i(TAG, "onMessageReceived: " + messages.get(0).getFrom());
-                //收到消息
-                unReadsum++;
-                EventBus.getDefault().post(new AnyEventType("" + unReadsum));
+            public void onMessageReceived(final List<EMMessage> messages) {
+                mMsgList.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        unReadsum += messages.size();
+                        EventBus.getDefault().post(new AnyEventType("" + unReadsum));
+                        for (EMMessage ms : messages) {
+                            for (int i = 0; i < mData.size(); i++) {
+                                if (mData.get(i).getUsername().equals(ms.getFrom())) {
+                                    mAdapter.notifyDataSetChanged();
+                                    mAdapter.notifyItemMoved(i, 0);
+                                }
+                            }
+                        }
+                    }
+                });
             }
 
             @Override
@@ -105,20 +122,6 @@ public class MsgFragment extends BaseFragment<NewsListPresenter> implements View
             }
         };
         EMClient.getInstance().chatManager().addMessageListener(msgListener);
-
-        Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
-
-
-        for (Map.Entry<String, EMConversation> map : conversations.entrySet()) {
-            unReadsum += map.getValue().getUnreadMsgCount();
-            ChatPreview cp = new ChatPreview();
-            cp.setUsername(map.getKey());
-           cp.setEmConversation(map.getValue());
-            mData.add(cp);
-        }
-        mAdapter.notifyDataSetChanged();
-        EventBus.getDefault().post(new AnyEventType("" + unReadsum));
-
     }
 
     @Override

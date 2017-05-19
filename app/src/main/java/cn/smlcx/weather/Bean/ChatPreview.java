@@ -25,4 +25,12 @@ public class ChatPreview {
     public void setEmConversation(EMConversation emConversation) {
         this.emConversation = emConversation;
     }
+
+    public ChatPreview(String username, EMConversation emConversation) {
+        this.username = username;
+        this.emConversation = emConversation;
+    }
+
+    public ChatPreview() {
+    }
 }
