@@ -6,7 +6,6 @@ import android.content.Intent;
 import java.util.List;
 
 import cn.smlcx.weather.Base.BaseAdapter;
-import cn.smlcx.weather.Bean.ChoiceBean;
 import cn.smlcx.weather.Bean.NewsBean;
 import cn.smlcx.weather.R;
 import cn.smlcx.weather.ui.activity.DetailActivity;
@@ -31,7 +30,7 @@ public class NewsAdapter extends BaseAdapter<NewsBean.ResultBean.DataBean>{
 
     @Override
     public int getItemLayoutID(int viewType) {
-        return R.layout.choice_item;
+        return R.layout.item_choice;
     }
 
     @Override

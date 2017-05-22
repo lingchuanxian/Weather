@@ -43,6 +43,10 @@ public class EmptyLayout extends FrameLayout {
     SpinKitView mEmptyLoading;
     @BindView(R.id.empty_layout)
     FrameLayout mEmptyLayout;
+    @BindView(R.id.rl_nonet_container)
+    FrameLayout mRlNonetContainer;
+    @BindView(R.id.tv_empty)
+    TextView mTvEmpty;
 
     public EmptyLayout(Context context) {
         this(context, null);
@@ -90,7 +94,8 @@ public class EmptyLayout extends FrameLayout {
 
     /**
      * 获取状态
-     * @return  状态
+     *
+     * @return 状态
      */
     public int getEmptyStatus() {
         return mEmptyStatus;
@@ -137,13 +142,20 @@ public class EmptyLayout extends FrameLayout {
             case STATUS_LOADING:
                 setVisibility(VISIBLE);
                 mRlEmptyContainer.setVisibility(GONE);
+                mRlNonetContainer.setVisibility(GONE);
                 mEmptyLoading.setVisibility(VISIBLE);
                 break;
             case STATUS_NO_DATA:
+                setVisibility(VISIBLE);
+                mEmptyLoading.setVisibility(GONE);
+                mRlNonetContainer.setVisibility(GONE);
+                mRlEmptyContainer.setVisibility(VISIBLE);
+                break;
             case STATUS_NO_NET:
                 setVisibility(VISIBLE);
                 mEmptyLoading.setVisibility(GONE);
-                mRlEmptyContainer.setVisibility(VISIBLE);
+                mRlEmptyContainer.setVisibility(GONE);
+                mRlNonetContainer.setVisibility(VISIBLE);
                 break;
             case STATUS_HIDE:
                 setVisibility(GONE);
@@ -177,5 +189,6 @@ public class EmptyLayout extends FrameLayout {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({STATUS_LOADING, STATUS_NO_NET, STATUS_NO_DATA})
-    public @interface EmptyStatus{}
+    public @interface EmptyStatus {
+    }
 }

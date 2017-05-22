@@ -29,7 +29,7 @@ public class ChoiceAdapter extends BaseAdapter<ChoiceBean.ResultBean.ListBean>{
 
     @Override
     public int getItemLayoutID(int viewType) {
-        return R.layout.choice_item;
+        return R.layout.item_choice;
     }
 
     @Override

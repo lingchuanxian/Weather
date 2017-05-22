@@ -5,7 +5,7 @@
              android:layout_height="match_parent">
 
     <FrameLayout
-        android:id="@+id/rl_empty_container"
+        android:id="@+id/rl_nonet_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -20,7 +20,28 @@
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:textColor="@color/colorAccent"
+            android:textColor="#000"
+            android:text="网络异常，点击重试"
+            android:textSize="16sp"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/rl_empty_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/ic_not_network"
+            android:drawablePadding="10dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textColor="#000"
             android:text="网络异常，点击重试"
             android:textSize="16sp"/>
     </FrameLayout>

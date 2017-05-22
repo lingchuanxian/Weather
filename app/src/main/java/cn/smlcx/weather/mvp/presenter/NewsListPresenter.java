@@ -57,6 +57,5 @@ public class NewsListPresenter extends BasePresenter<NewsListModel,ViewContract.
                         mRootView.showNewsList(list);
                     }
                 });
-
     }
 }

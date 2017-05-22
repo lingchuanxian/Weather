@@ -18,4 +18,9 @@ public interface BaseView {
      * @param err 错误内容
      */
     void showErr(String err);
+    /**
+     * 显示暂无数据
+     * @param msg 提示信息
+     */
+    void showNonData(String msg);
 }

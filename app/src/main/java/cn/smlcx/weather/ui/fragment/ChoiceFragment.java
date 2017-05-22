@@ -76,10 +76,14 @@ public class ChoiceFragment extends BaseFragment<ChoiceListPresenter> implements
         if (pageIndex == 1) {
             mData.clear();
         }
-        mAdapter.addAll(mList);
-        mSwipeRefreshLayout.setRefreshing(false);
-        isLoading = false;
-        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
+        if(mList.size()==0){
+            showErr("当前暂无数据");
+        }else{
+            mAdapter.addAll(mList);
+            mSwipeRefreshLayout.setRefreshing(false);
+            isLoading = false;
+            mAdapter.notifyItemRemoved(mAdapter.getItemCount());
+        }
     }
 
     /**

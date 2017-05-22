@@ -46,7 +46,7 @@ public class ContactsFragment extends BaseFragment<NewsListPresenter> implements
     protected void initViews() {
         mToolbar.setTitle("通讯录");
         initRecycleView();
-        mAdapter = new ContactAdapter(R.layout.contact_item,userList,mContext);
+        mAdapter = new ContactAdapter(R.layout.item_contact,userList,mContext);
         mContactsList.setAdapter(mAdapter);
         mAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override

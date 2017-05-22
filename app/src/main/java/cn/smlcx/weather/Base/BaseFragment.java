@@ -49,6 +49,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     private void init() {
         mContext = getActivity();
         mToolbar = (Toolbar) view.findViewById(toolbar);
+        showLoding();
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.mipmap.ic_drawer_home);
@@ -89,6 +90,13 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     public void showErr(String err) {
         if (mEmptyLayout != null) {
             mEmptyLayout.setEmptyStatus(EmptyLayout.STATUS_NO_NET);
+        }
+    }
+
+    @Override
+    public void showNonData(String msg) {
+        if (mEmptyLayout != null) {
+            mEmptyLayout.setEmptyStatus(EmptyLayout.STATUS_NO_DATA);
         }
     }
 

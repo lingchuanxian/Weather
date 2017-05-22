@@ -2,13 +2,10 @@ package cn.smlcx.weather.ui.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hyphenate.EMMessageListener;
@@ -24,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.smlcx.weather.Base.BaseFragment;
 import cn.smlcx.weather.Bean.AnyEventType;
@@ -55,7 +51,7 @@ public class MsgFragment extends BaseFragment<NewsListPresenter> implements View
     protected void initViews() {
         mToolbar.setTitle("消息");
         initRecycleView();
-        mAdapter = new ChatAdapter(R.layout.msg_item, mData,mContext);
+        mAdapter = new ChatAdapter(R.layout.item_msg, mData,mContext);
         mMsgList.setAdapter(mAdapter);
 
         mAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
@@ -147,14 +143,6 @@ public class MsgFragment extends BaseFragment<NewsListPresenter> implements View
                         .color(Color.parseColor("#e0e0e0"))
                         .size(3)
                         .build());
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
     }
 
     @Override

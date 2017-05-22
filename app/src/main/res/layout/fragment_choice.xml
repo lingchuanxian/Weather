@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
-            tools:listitem="@layout/choice_item"
+            tools:listitem="@layout/item_choice"
             />
 
     </android.support.v4.widget.SwipeRefreshLayout>

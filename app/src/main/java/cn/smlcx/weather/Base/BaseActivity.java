@@ -101,4 +101,9 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     public void showErr(String err) {
 
     }
+
+    @Override
+    public void showNonData(String msg) {
+
+    }
 }
