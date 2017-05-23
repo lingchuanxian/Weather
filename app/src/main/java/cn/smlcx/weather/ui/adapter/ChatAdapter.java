@@ -51,6 +51,7 @@ public class ChatAdapter extends BaseQuickAdapter<ChatPreview> {
         if(num <= 0){
             helper.setVisible(R.id.chat_num_unread,false);
         }else{
+            helper.setVisible(R.id.chat_num_unread,true);
             helper.setText(R.id.chat_num_unread,num+"");
         }
     }

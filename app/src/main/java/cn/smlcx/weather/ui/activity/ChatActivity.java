@@ -36,8 +36,10 @@ public class ChatActivity extends BaseActivity {
     @Override
     protected void initViews() {
         userName = getIntent().getExtras().get("userName").toString();
-        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(userName);
-        conversation.markAllMessagesAsRead();
+       /* EMConversation conversation = EMClient.getInstance().chatManager().getConversation(userName);
+       if(conversation.getUnreadMsgCount()>0){
+           conversation.markAllMessagesAsRead();
+       }*/
         mToolbar.setTitle(userName);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
