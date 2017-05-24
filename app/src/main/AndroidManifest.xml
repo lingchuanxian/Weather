@@ -45,10 +45,9 @@
             </intent-filter>
         </activity>
        <!-- <activity android:name=".ui.activity.LoginActivity"></activity>-->
-        <activity android:name=".ui.activity.DetailActivity"></activity>
-        <activity android:name=".ui.activity.MainActivity"></activity>
-        <activity android:name=".ui.activity.ChatActivity"></activity>
-
+        <activity android:name=".ui.activity.DetailActivity"/>
+        <activity android:name=".ui.activity.MainActivity"/>
+        <activity android:name=".ui.activity.ChatActivity"/>
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

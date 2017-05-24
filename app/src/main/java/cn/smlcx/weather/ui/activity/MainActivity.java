@@ -51,7 +51,6 @@ public class MainActivity extends BaseActivity<ChoiceListPresenter> {
         EMClient.getInstance().chatManager().loadAllConversations();
 
         mViewPager.setOffscreenPageLimit(5);
-        mViewPager.setCurrentItem(2);
         EventBus.getDefault().register(this);
     }
 

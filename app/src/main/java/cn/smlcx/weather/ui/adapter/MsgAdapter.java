@@ -19,16 +19,16 @@ import cn.smlcx.weather.R;
  * Created by lcx on 2017/5/10.
  */
 
-public class ChatAdapter extends BaseQuickAdapter<ChatPreview> {
+public class MsgAdapter extends BaseQuickAdapter<ChatPreview> {
     private Context mContext;
-    public ChatAdapter(int layoutResId, List<ChatPreview> data, Context context) {
+    public MsgAdapter(int layoutResId, List<ChatPreview> data, Context context) {
         super(layoutResId, data);
         mContext = context;
     }
-    public ChatAdapter(List<ChatPreview> data) {
+    public MsgAdapter(List<ChatPreview> data) {
         super(data);
     }
-    public ChatAdapter(View contentView, List<ChatPreview> data) {
+    public MsgAdapter(View contentView, List<ChatPreview> data) {
         super(contentView, data);
     }
 

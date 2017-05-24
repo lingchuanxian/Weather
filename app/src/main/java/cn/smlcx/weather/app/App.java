@@ -30,7 +30,6 @@ public class App extends Application{
                 .appModule(new AppModule(this))
                 .build()
                 .app();*/
-
         EMOptions options = new EMOptions();
         // 默认添加好友时，是不需要验证的，改成需要验证
         options.setAcceptInvitationAlways(false);

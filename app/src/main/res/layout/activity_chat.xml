@@ -1,41 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#ffffff">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#e0e0e0">
 
-    <include android:layout_width="match_parent"
+    <include android:id="@+id/chat_head"
+             android:layout_width="match_parent"
              android:layout_height="wrap_content"
              layout="@layout/common_head"
              tools:layout_editor_absoluteY="0dp"
              tools:layout_editor_absoluteX="8dp"/>
-    <View
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000"
-        android:layout_above="@+id/chat_action"/>
-    <LinearLayout android:id="@+id/chat_action"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:gravity="center_vertical"
-        android:layout_marginTop="4dp">
+        android:layout_height="match_parent"
+        android:layout_below="@id/chat_head">
 
-        <EditText android:id="@+id/chat_content"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.8"/>
+        <LinearLayout android:id="@+id/chat_record"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical">
 
-        <Button android:id="@+id/send"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.2"
-            android:text="send"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/lv_chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/chat_action"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp"
+            android:background="#ffffff"
+            android:paddingLeft="13dp"
+            android:paddingRight="13dp"
+            android:layout_alignParentBottom="true">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@mipmap/t7"
+                    android:layout_centerInParent="true"
+                    android:scaleType="fitXY"/>
+
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/chat_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5.5"/>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@mipmap/sz"
+                    android:layout_marginLeft="5dp"
+                    android:layout_centerInParent="true"
+                    android:scaleType="fitXY"/>
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.3"
+                android:gravity="center"
+                android:layout_gravity="right"
+                android:paddingLeft="10dp">
+
+                <ImageView
+                    android:id="@+id/other_else"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@mipmap/a6b"
+                    android:layout_centerInParent="true"
+                    android:scaleType="fitXY"/>
+
+                <TextView android:id="@+id/send"
+                          android:layout_width="40dp"
+                          android:layout_height="32dp"
+                          android:text="发送"
+                          android:gravity="center"
+                          android:textColor="#fff"
+                          android:layout_centerInParent="true"
+                          android:background="@drawable/send_button_style"
+                          android:visibility="gone"/>
+
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>
 

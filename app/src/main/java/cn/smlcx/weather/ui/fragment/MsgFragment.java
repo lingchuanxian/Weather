@@ -30,7 +30,7 @@ import cn.smlcx.weather.R;
 import cn.smlcx.weather.mvp.presenter.NewsListPresenter;
 import cn.smlcx.weather.mvp.view.ViewContract;
 import cn.smlcx.weather.ui.activity.ChatActivity;
-import cn.smlcx.weather.ui.adapter.ChatAdapter;
+import cn.smlcx.weather.ui.adapter.MsgAdapter;
 
 
 public class MsgFragment extends BaseFragment<NewsListPresenter> implements ViewContract.NewsListView, SwipeRefreshLayout.OnRefreshListener {
@@ -39,7 +39,7 @@ public class MsgFragment extends BaseFragment<NewsListPresenter> implements View
     RecyclerView mMsgList;
     Unbinder unbinder;
     private int unReadsum = 0;
-    private ChatAdapter mAdapter;
+    private MsgAdapter mAdapter;
     private List<ChatPreview> mData = new ArrayList<ChatPreview>();
 
     @Override
@@ -51,7 +51,7 @@ public class MsgFragment extends BaseFragment<NewsListPresenter> implements View
     protected void initViews() {
         mToolbar.setTitle("消息");
         initRecycleView();
-        mAdapter = new ChatAdapter(R.layout.item_msg, mData,mContext);
+        mAdapter = new MsgAdapter(R.layout.item_msg, mData,mContext);
         mMsgList.setAdapter(mAdapter);
 
         mAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
@@ -67,6 +67,8 @@ public class MsgFragment extends BaseFragment<NewsListPresenter> implements View
 
     @Override
     protected void initData() {
+        mData.clear();
+        unReadsum = 0;
         Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
         for (Map.Entry<String, EMConversation> map : conversations.entrySet()) {
             unReadsum += map.getValue().getUnreadMsgCount();
@@ -143,6 +145,12 @@ public class MsgFragment extends BaseFragment<NewsListPresenter> implements View
                         .color(Color.parseColor("#e0e0e0"))
                         .size(3)
                         .build());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
     }
 
     @Override
